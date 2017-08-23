@@ -1,0 +1,26 @@
+{
+  "name": "js13kgames_2017_Lost",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "http-server ./src -p 1317"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sorskoot/js13kgames_2017_Lost.git"
+  },
+  "keywords": [],
+  "author": "Sorskoot",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/sorskoot/js13kgames_2017_Lost/issues"
+  },
+  "homepage": "https://github.com/sorskoot/js13kgames_2017_Lost#readme",
+  "devDependencies": {
+    "http-server": "^0.10.0",
+    "shader-loader": "^1.3.1",
+    "webpack": "^3.5.5"
+  }
+}

@@ -1,0 +1,6 @@
+- Build process => Shaders from external files into code
+- Get Shaders to work
+- Generate world
+- Movement
+- Battles
+- Reaching the Goal

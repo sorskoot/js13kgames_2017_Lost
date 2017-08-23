@@ -1,0 +1,61 @@
+<html>
+
+<head>
+    <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
+    <script src="myshader.js"></script>
+    <!-- fragment shader -->
+<script id="fragment" type="x-shader/x-fragment">
+#define SPRITE_WIDTH 8.0
+#define SPRITE_HEIGHT 8.0
+
+precision mediump float;
+uniform vec2 vUv;
+
+// Uniform variables
+
+uniform sampler2D DiffuseTexture;
+//uniform sampler2D Lookup;
+uniform float index;
+uniform vec2 spriteDimensions;
+
+// Input variables
+varying vec2 FragTexcoord;
+
+void main(void)
+{
+ // vec4 foo = texture2D(Lookup,vec2(0,0));
+  
+  float u = clamp(floor(mod(FragTexcoord.x,1.0)*SPRITE_WIDTH)/SPRITE_WIDTH,0.0,1.0)/spriteDimensions.x+1.0/128.0+(index*1.0/8.0);
+  float v = clamp(floor(mod(FragTexcoord.y,1.0)*SPRITE_HEIGHT)/SPRITE_HEIGHT,0.0,1.0)/spriteDimensions.y+1.0/16.0;
+  
+  vec2 UV = vec2(u, v);
+  
+  gl_FragColor = texture2D(DiffuseTexture, vec2(UV.x, UV.y));
+}
+</script>
+<script id="vertex" type="x-shader/x-vertex">
+  varying vec2 FragTexcoord;  
+  
+  uniform vec2 repeat;
+
+  void main() {
+    FragTexcoord = vec2(uv.x*repeat.x,uv.y*repeat.y) ;    
+    gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+  }
+</script>
+</head>
+<body>
+        <a-scene inspector="url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js" class="fullscreen">
+            <a-assets>
+                <img id="my-texture" src="lost.png">
+              </a-assets>
+              <a-entity camera="active:true;zoom:2;near:0.01;userHeight:1.6" look-controls="standing:true" position="0 6.18 7.97" rotation="-24.981916281119357 0.8022532292150734 0" scale="1 1 1" visible="true"></a-entity>
+              
+            <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
+            <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
+            <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
+            <a-plane material-texture="color: blue; src: #my-texture" position="0 0 -4" rotation="-90 0 0" width="8" height="8" color="#7BC8A4" scale="" visible="" material="" geometry=""></a-plane>
+            <a-sky color="#ECECEC"></a-sky>
+          </a-scene>
+</body>
+</html>
