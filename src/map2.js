@@ -8,7 +8,7 @@ var pieces = [
         1, 1, 1, 1, 0
     ],
     [
-        7, 5,
+        5, 7,
         0, 0, 1, 1, 0,
         0, 1, 1, 1, 1,
         0, 1, 0, 1, 1,
@@ -37,22 +37,22 @@ var map = {
 /// To Index
 var toi = (x, y) => y * mapWidth + x;
 
-var addRoom=()=>{
+var addRoom=(pos)=>{
     let piece = rnd(3);
-    let pos = rnd(toi(mapWidth - pieces[piece][0], 
-                      mapWidth - pieces[piece][1]));
+    // let pos = rnd(toi(mapWidth - pieces[piece][0], 
+    //                   mapWidth - pieces[piece][1]));
     console.log(pos);
     pieces[piece].slice(2).map((v, i) => {
         let y = ~~(i / pieces[piece][0]);
         let x = i % pieces[piece][0];
         let ty = (pos % mapWidth + y);
-        let tp = toi(pos + x, ty);
+        let tp = toi((pos%mapWidth) + x, ty);
         if (tp < mapWidth * mapWidth) { map.tiles[tp] = v; }
     });
 }
-for (let i = 0; i < 25; i++) {
-    addRoom();
-}
+//for (let i = 0; i < 25; i++) {
+    addRoom(toi(mapWidth/2,mapWidth/2));
+//}
 
 var Renderer = {
     canvas: null,
