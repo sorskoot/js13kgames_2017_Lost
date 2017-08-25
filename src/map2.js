@@ -4,8 +4,8 @@ var pieces = [
         0, 0, 2, 1, 0,
         2, 1, 1, 1, 1,
         0, 1, 1, 1, 1,
-        1, 1, 0, 1, 0,
-        1, 1, 1, 1, 0
+        1, 1, 0, 1, 2,
+        1, 1, 1, 2, 0
     ],
     [
         5, 7,
@@ -28,7 +28,7 @@ var pieces = [
 
     [
         5, 2,
-        0, 1, 1, 1, 2, 
+        0, 1, 1, 1, 2,
         2, 1, 1, 0, 0
     ],
 ];
@@ -41,47 +41,88 @@ for (let i = 0; i < pl; i++) {
 }
 pl = pieces.length;
 pieces.forEach(e => {
-    e.top = [];
-    e.slice(2, e[0]+2).map((v, i, a) => {
-        if (v === 2) e.top.push(i);
+    let x = e[0], y = e[1];
+    e.slice(2, x + 2).map((v, i, a) => {
+        if (v === 2) e.t = i;
+    });
+    e.slice(2 + (y - 1) * x, (y - 1) * x + x + 2).map((v, i, a) => {
+        if (v === 2) e.b = i;
     })
+    for (let i = 0; i < e.length - 2; i += e[0]) {
+        if (e[i + 2] === 2) e.l = ~~(i / e[1]);
+        if (e[i + 1 + e[0]] === 2) e.r = ~~(i / e[1]);
+    }
 })
 
 var map = {
     tiles: Array(mapWidth * mapWidth).fill(0)
 };
 /// To Index
-var toi = (x, y) => y * mapWidth + x;
+var toi = (x, y) => y * mapWidth + x,
+    // to X,Y position
+    tox = i => i % mapWidth,
+    toy = i => ~~(i / mapWidth);
+
 pieces[0].top = [2];
 var RoomsToBuild = 25;
 
-var addRoom = function (pos) {
+var addRoom = function (pos, roomnum, placement) {
     let piece = rnd(pl);
-    // let pos = rnd(toi(mapWidth - pieces[piece][0], 
-    //                   mapWidth - pieces[piece][1]));
+    let placementPos, tx, ty;
+    if (!placement || pieces[piece][placement]) {
 
-    //
-    //  50  51  52
-    // 150 151 152 
-    // 250 251 153    
-    pieces[piece].slice(2).map((v, i) => {
-        let y = ~~(i / pieces[piece][0]);
-        let x = i % pieces[piece][0];
-        let ty = ~~(pos / mapWidth) + y;
-        let tx = pos % mapWidth + x;
-        let tp = toi(tx, ty);        
-        if (tp < mapWidth * mapWidth) { map.tiles[tp] = v; }
-    });
+        switch (placement) {
+            case 't'://top
+                break;
+            case 'b'://bottom
+                placementPos = toi(tox(pos) - pieces[piece].b, toy(pos) - pieces[piece][1]);
+                break;
+            case 'l'://left
+                break;
+            case 'r'://right
+                break;
+            default://undefined
+                placementPos = pos;
+        }
 
-    console.log(pieces[piece].top);
+
+        pieces[piece].slice(2).map((v, i) => {
+            let y = ~~(i / pieces[piece][0]);
+            let x = i % pieces[piece][0];
+            ty = ~~(placementPos / mapWidth) + y;
+            tx = placementPos % mapWidth + x;
+            let tp = toi(tx, ty);
+            if (tp < mapWidth * mapWidth) { map.tiles[tp] = v; }
+        });
+    }
+    if (roomnum > 0) {
+        roomnum--;
+        // todo: somehow keep track of the entrices used..
+        // maybe an array on roomnum with 'tbl' if top bottom and left are used
+        // then with ~indexof('t') check if room has a 't'
+        
+        if (pieces[piece].t && placement != 't') {
+            roomnum = addRoom(toi(tox(placementPos) + pieces[piece].t, toy(placementPos)), roomnum, 'b');
+        }
+        else if (pieces[piece].b && placement != 'b') {
+            roomnum = addRoom(toi(tox(placementPos) + pieces[piece].t, toy(placementPos)), roomnum, 't');
+        }
+        else if (pieces[piece].r && placement != 'r') {
+            roomnum = addRoom(toi(tox(placementPos), toy(placementPos) + pieces[piece].r), roomnum, 'l');
+        }
+        else if (pieces[piece].l && placement != 'l') {
+            roomnum = addRoom(toi(tox(placementPos), toy(placementPos) + pieces[piece].l), roomnum, 'r');
+        }
+    }
+    return roomnum;
 }
 //for (let i = 0; i < 25; i++) {
-addRoom(toi(32, 32));
+addRoom(toi(32, 32), 5);
 //}
 
-for (let i = 0; i < 25; i++) {
-    addRoom(rnd(mapWidth * mapWidth));
-}
+//for (let i = 0; i < 25; i++) {
+//addRoom(rnd(mapWidth * mapWidth));
+//}
 
 
 var Renderer = {
