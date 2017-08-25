@@ -36,6 +36,8 @@ AFRAME.registerComponent('material-texture', {
   applyToMesh: function () {
     const mesh = this.el.getObject3D('mesh');
     if (mesh) {
+      this.material.uniforms.repeat.value.x =+this.el.getAttribute("width");
+      this.material.uniforms.repeat.value.y =+this.el.getAttribute("height");
       mesh.material = this.material;
     }
   },

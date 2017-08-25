@@ -2,7 +2,7 @@
 
 <head>
     <script src="https://aframe.io/releases/0.6.1/aframe.min.js"></script>
-    <script src="myshader.js"></script>
+    <script src="/src/myShader.js"></script>
     <!-- fragment shader -->
 <script id="fragment" type="x-shader/x-fragment">
 #define SPRITE_WIDTH 8.0
@@ -45,16 +45,29 @@ void main(void)
 </script>
 </head>
 <body>
-        <a-scene inspector="url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js" class="fullscreen">
+        <a-scene  stats
+            fog="type: linear; color: #AAA;near:5;far:50"
+            inspector="url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js" class="fullscreen">
             <a-assets>
-                <img id="my-texture" src="lost.png">
+                <img id="my-texture" src="/lost.png">
               </a-assets>
-              <a-entity camera="active:true;zoom:2;near:0.01;userHeight:1.6" look-controls="standing:true" position="0 6.18 7.97" rotation="-24.981916281119357 0.8022532292150734 0" scale="1 1 1" visible="true"></a-entity>
+              <a-entity camera="active:true;zoom:2;near:0.01;userHeight:1.6" 
+                look-controls="standing:true" position="0 6.18 7.97" 
+                rotation="-24.981916281119357 0.8022532292150734 0" 
+                scale="1 1 1" 
+                visible="true">
+                    <a-entity cursor="fuse: true; fuseTimeout: 500"
+            position="0 0 -1"
+            geometry="primitive: ring; radiusInner: 0.002; radiusOuter: 0.003"
+            material="color: black; shader: flat">
+  </a-entity>
+                  
+              </a-entity>
               
             <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
             <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
             <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-            <a-plane material-texture="color: blue; src: #my-texture" position="0 0 -4" rotation="-90 0 0" width="8" height="8" color="#7BC8A4" scale="" visible="" material="" geometry=""></a-plane>
+            <a-plane material-texture="color: blue; src: #my-texture" position="0 0 -4" rotation="-90 0 0" width="80" height="80" color="#7BC8A4" scale="" visible="" material="" geometry=""></a-plane>
             <a-sky color="#ECECEC"></a-sky>
           </a-scene>
 </body>
