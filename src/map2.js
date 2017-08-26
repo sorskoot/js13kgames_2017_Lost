@@ -65,6 +65,7 @@ var toi = (x, y) => y * mapWidth + x,
 
 pieces[0].top = [2];
 var RoomsToBuild = 25;
+var rooms = [];
 
 var addRoom = function (pos, roomnum, placement) {
     let piece = rnd(pl);
@@ -100,17 +101,21 @@ var addRoom = function (pos, roomnum, placement) {
         // todo: somehow keep track of the entrices used..
         // maybe an array on roomnum with 'tbl' if top bottom and left are used
         // then with ~indexof('t') check if room has a 't'
-        
-        if (pieces[piece].t && placement != 't') {
+        rooms[roomnum] = rooms[roomnum] || '';
+        if (pieces[piece].t && placement != 't' && !~rooms[roomnum].indexOf('t')) {
+            rooms[roomnum] += 't';
             roomnum = addRoom(toi(tox(placementPos) + pieces[piece].t, toy(placementPos)), roomnum, 'b');
         }
-        else if (pieces[piece].b && placement != 'b') {
+        else if (pieces[piece].b && placement != 'b' && !~rooms[roomnum].indexOf('b')) {
+            rooms[roomnum] += 'b';
             roomnum = addRoom(toi(tox(placementPos) + pieces[piece].t, toy(placementPos)), roomnum, 't');
         }
-        else if (pieces[piece].r && placement != 'r') {
+        else if (pieces[piece].r && placement != 'r' && !~rooms[roomnum].indexOf('r')) {
+            rooms[roomnum] += 'r';
             roomnum = addRoom(toi(tox(placementPos), toy(placementPos) + pieces[piece].r), roomnum, 'l');
         }
-        else if (pieces[piece].l && placement != 'l') {
+        else if (pieces[piece].l && placement != 'l' && !~rooms[roomnum].indexOf('l')) {
+            rooms[roomnum] += 'l';
             roomnum = addRoom(toi(tox(placementPos), toy(placementPos) + pieces[piece].l), roomnum, 'r');
         }
     }
