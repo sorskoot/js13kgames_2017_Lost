@@ -16,6 +16,13 @@ var pieces = [
         1, 1, 1, 1, 0,
         1, 1, 1, 1, 0,
         0, 1, 2, 1, 0
+    ], [
+        5, 5,
+        1, 1, 1, 1, 0,
+        2, 1, 1, 1, 0,
+        1, 1, 0, 1, 1,
+        1, 1, 0, 0, 2,
+        0, 1, 1, 1, 0
     ],
     [
         2, 5,
@@ -68,61 +75,59 @@ var RoomsToBuild = 25;
 var rooms = [];
 
 var addRoom = function (pos, roomnum, placement) {
-    let piece = rnd(pl);
-    let placementPos, tx, ty;
-    if (!placement || pieces[piece][placement]) {
-
-        switch (placement) {
-            case 't'://top
-                break;
-            case 'b'://bottom
-                placementPos = toi(tox(pos) - pieces[piece].b, toy(pos) - pieces[piece][1]);
-                break;
-            case 'l'://left
-                break;
-            case 'r'://right
-                break;
-            default://undefined
-                placementPos = pos;
-        }
-
-
-        pieces[piece].slice(2).map((v, i) => {
-            let y = ~~(i / pieces[piece][0]);
-            let x = i % pieces[piece][0];
-            ty = ~~(placementPos / mapWidth) + y;
-            tx = placementPos % mapWidth + x;
-            let tp = toi(tx, ty);
-            if (tp < mapWidth * mapWidth) { map.tiles[tp] = v; }
-        });
+    let placementPos, tx, ty, px = tox(pos), py = toy(pos);
+    let currentPiece = pieces[2];//rnd(pl)
+    switch (placement) {
+        case 't'://top
+            placementPos = toi(px - currentPiece.t, py + 1);
+            break;
+        case 'b'://bottom               
+            placementPos = toi(px - currentPiece.b, py - currentPiece[1]);
+            break;
+        case 'l'://left
+            placementPos = toi(px - currentPiece[0], py - currentPiece.l);
+            break;
+        case 'r'://right
+            placementPos = toi(px + 1, py - currentPiece.r);
+            break;
+        default://undefined
+            placementPos = pos;
     }
+
+
+    currentPiece.slice(2).map((v, i) => {
+        let y = ~~(i / currentPiece[0]);
+        let x = i % currentPiece[0];
+        ty = ~~(placementPos / mapWidth) + y;
+        tx = placementPos % mapWidth + x;
+        let tp = toi(tx, ty);
+        if (tp < mapWidth * mapWidth) { map.tiles[tp] = v; }
+    });
+
     if (roomnum > 0) {
         roomnum--;
-        // todo: somehow keep track of the entrices used..
-        // maybe an array on roomnum with 'tbl' if top bottom and left are used
-        // then with ~indexof('t') check if room has a 't'
         rooms[roomnum] = rooms[roomnum] || '';
-        if (pieces[piece].t && placement != 't' && !~rooms[roomnum].indexOf('t')) {
+        if (currentPiece.t !== undefined && placement != 't' && !~rooms[roomnum].indexOf('t')) {
             rooms[roomnum] += 't';
-            roomnum = addRoom(toi(tox(placementPos) + pieces[piece].t, toy(placementPos)), roomnum, 'b');
+            roomnum = addRoom(toi(tox(placementPos) + currentPiece.t, toy(placementPos)), roomnum, 'b');
         }
-        else if (pieces[piece].b && placement != 'b' && !~rooms[roomnum].indexOf('b')) {
+        else if (currentPiece.b !== undefined && placement != 'b' && !~rooms[roomnum].indexOf('b')) {
             rooms[roomnum] += 'b';
-            roomnum = addRoom(toi(tox(placementPos) + pieces[piece].t, toy(placementPos)), roomnum, 't');
+            roomnum = addRoom(toi(tox(placementPos) + currentPiece.b, toy(placementPos)), roomnum, 't');
         }
-        else if (pieces[piece].r && placement != 'r' && !~rooms[roomnum].indexOf('r')) {
+        else if (currentPiece.r !== undefined && placement != 'r' && !~rooms[roomnum].indexOf('r')) {
             rooms[roomnum] += 'r';
-            roomnum = addRoom(toi(tox(placementPos), toy(placementPos) + pieces[piece].r), roomnum, 'l');
+            roomnum = addRoom(toi(tox(placementPos), toy(placementPos) + currentPiece.r), roomnum, 'l');
         }
-        else if (pieces[piece].l && placement != 'l' && !~rooms[roomnum].indexOf('l')) {
+        else if (currentPiece.l !== undefined && placement != 'l' && !~rooms[roomnum].indexOf('l')) {
             rooms[roomnum] += 'l';
-            roomnum = addRoom(toi(tox(placementPos), toy(placementPos) + pieces[piece].l), roomnum, 'r');
+            roomnum = addRoom(toi(tox(placementPos), toy(placementPos) + currentPiece.l), roomnum, 'r');
         }
     }
     return roomnum;
 }
 //for (let i = 0; i < 25; i++) {
-addRoom(toi(32, 32), 5);
+addRoom(toi(32, 32), 25);
 //}
 
 //for (let i = 0; i < 25; i++) {
@@ -147,10 +152,10 @@ var Renderer = {
             for (var x = 0; x < mapWidth; x++) {
                 let pos = toi(x, y);
                 var tile = map.tiles[pos];
-                if (tile == 0) this.ctx.fillStyle = '#351330';
-                else if (tile == 1) this.ctx.fillStyle = '#64908A';
-                else if (tile == 3) this.ctx.fillStyle = '#90648A';
-                else this.ctx.fillStyle = '#424254';
+                if (tile == 0) this.ctx.fillStyle = '#111111';
+                else if (tile == 1) this.ctx.fillStyle = '#AAAAAA';
+                else if (tile == 3) this.ctx.fillStyle = '#888888';
+                else this.ctx.fillStyle = '#FFFFFF';
                 this.ctx.fillRect(x * this.scale, y * this.scale, this.scale, this.scale);
             }
         }
