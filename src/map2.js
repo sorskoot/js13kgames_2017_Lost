@@ -1,47 +1,47 @@
 var pieces = [
     [
         5, 5,
-        0, 0, 2, 1, 0,
-        2, 1, 1, 1, 1,
-        0, 1, 1, 1, 1,
-        1, 1, 0, 1, 2,
-        1, 1, 1, 2, 0
+        0, 0, 2, 0, 0,
+        2, 1, 1, 1, 0,
+        0, 1, 1, 1, 0,
+        0, 1, 0, 1, 2,
+        0, 0, 0, 2, 0
     ],
     [
         5, 7,
-        0, 0, 1, 1, 0,
-        0, 1, 1, 1, 1,
-        0, 1, 0, 1, 1,
-        1, 1, 0, 1, 2,
-        1, 1, 1, 1, 0,
-        1, 1, 1, 1, 0,
-        0, 1, 2, 1, 0
+        0, 0, 2, 0, 0,
+        0, 1, 1, 1, 0,
+        0, 1, 0, 1, 0,
+        2, 1, 0, 1, 2,
+        0, 1, 1, 1, 0,
+        0, 1, 1, 1, 0,
+        0, 0, 2, 0, 0
     ],
     [
         5, 5,
-        1, 1, 1, 1, 0,
+        0, 1, 1, 1, 0,
         2, 1, 1, 1, 0,
-        1, 1, 0, 1, 1,
-        1, 1, 0, 0, 2,
+        0, 1, 0, 1, 0,
+        0, 1, 0, 1, 2,
         0, 1, 1, 1, 0
     ],
     [
         2, 5,
-        0, 1,
-        1, 2,
-        1, 1,
-        1, 0,
-        2, 0,
+        0, 0,
+        0, 0,
+        2, 2,
+        0, 0,
+        0, 0,
     ],
 
     [
         5, 2,
-        0, 1, 1, 1, 2,
-        2, 1, 1, 0, 0
+        0, 0, 2, 0, 0,
+        0, 0, 2, 0, 0
     ],
 ];
 
-var mapWidth = 64;
+var mapWidth = 256;
 
 let rnd = m => ~~(Math.random() * m);
 let pl = pieces.length;
@@ -98,40 +98,43 @@ pieces[0].top = [2];
 var RoomsToBuild = 25;
 var rooms = [];
 
+var pp = "tlbr";
 var addRoom = function (px, py, roomnum, placement) {
-    let placementPos, tx, ty, currentPiece;
-
-    for (let i = 0; i < 50; i++) {
-        currentPiece = pieces[rnd(pl)];
-        if(currentPiece[placement] !== undefined){
-            break;
+    let placementPos, tx, ty, currentPiece,possible,tries=0;
+    do {
+        tries++;
+        for (let i = 0; i < 150; i++) {          
+            currentPiece = pieces[rnd(pl)];
+            if (currentPiece[placement] !== undefined) {
+                break;
+            }
         }
-    }
 
-    if (currentPiece[placement] === undefined) {
-        console.log(`found undefined: ${placement}`)
-        return roomnum;
-    };
+        if (currentPiece[placement] === undefined) {
+            console.log(`found undefined: ${placement}`)
+            return roomnum;
+        };
 
-    switch (placement) {
+      //  console.log(`${placement} - ${roomnum}`);
 
-        case 'b': //bottom               
-            placementPos = { x: px - currentPiece.b, y: py + currentPiece[1] };
-            break;
-        case 't': //top
-            placementPos = { x: px - currentPiece.t, y: py };
-            break;
-        case 'l': //left
-            placementPos = { x: px - currentPiece[0], y: py - currentPiece.r };
-            break;
-        case 'r': //right
-            placementPos = { x: px, y: py - currentPiece.l };
-            break;
-        // default: //undefined
-        //     placementPos = { x: px, y: py };
-    }
+        switch (placement) {
 
+            case 'b': //bottom               
+                placementPos = { x: px - currentPiece.b, y: py + currentPiece[1] };
+                break;
+            case 't': //top
+                placementPos = { x: px - currentPiece.t, y: py };
+                break;
+            case 'l': //left
+                placementPos = { x: px - currentPiece[0], y: py - currentPiece.r };
+                break;
+            case 'r': //right
+                placementPos = { x: px, y: py - currentPiece.l };
+                break;
+        }
 
+        //possible = mapContext.getImageData(px, py, currentPiece[0], currentPiece[1]).data.every(d => d === 0);
+    } while (!possible && tries < 5);
     currentPiece.slice(2).map((v, i) => {
         let y = ~~(i / currentPiece[0]);
         let x = i % currentPiece[0];
@@ -145,33 +148,38 @@ var addRoom = function (px, py, roomnum, placement) {
     });
 
     if (roomnum > 0) {
+       // console.log(`start ${roomnum}`);
         roomnum--;
         rooms[roomnum] = rooms[roomnum] || '';
-        if (currentPiece.b !== undefined && placement != 'b' && !~rooms[roomnum].indexOf('b')) {
-            rooms[roomnum] += 'b';
-            roomnum = addRoom(placementPos.x + currentPiece.b, placementPos.y + currentPiece[1], roomnum, 't');
-        }
-
-        if (currentPiece.t !== undefined && placement != 't' && !~rooms[roomnum].indexOf('t')) {
-            rooms[roomnum] += 't';
-            roomnum = addRoom(placementPos.x + currentPiece.t, placementPos.y, roomnum, 'b');
-        }
 
         if (currentPiece.r !== undefined && placement != 'r' && !~rooms[roomnum].indexOf('r')) {
+         //   console.log(`-- R${currentPiece.r}`);
             rooms[roomnum] += 'r';
-            roomnum = addRoom(placementPos.x, placementPos.y + currentPiece.l, roomnum, 'l');
+            addRoom(placementPos.x, placementPos.y + currentPiece.l, roomnum, 'l');            
         }
 
         if (currentPiece.l !== undefined && placement != 'l' && !~rooms[roomnum].indexOf('l')) {
+           // console.log(`-- L${currentPiece.l}`)
             rooms[roomnum] += 'l';
-            roomnum = addRoom(placementPos.x + currentPiece[0], placementPos.y + currentPiece.r, roomnum, 'r');
+            addRoom(placementPos.x + currentPiece[0], placementPos.y + currentPiece.r, roomnum, 'r');
+        }
+        if (currentPiece.b !== undefined && placement != 'b' && !~rooms[roomnum].indexOf('b')) {
+            //console.log(`-- B${currentPiece.b}`)
+            rooms[roomnum] += 'b';
+            addRoom(placementPos.x + currentPiece.b, placementPos.y + currentPiece[1], roomnum, 't');
+        }
+        if (currentPiece.t !== undefined && placement != 't' && !~rooms[roomnum].indexOf('t')) {
+            //console.log(`-- T${currentPiece.t}`)
+            rooms[roomnum] += 't';
+            addRoom(placementPos.x + currentPiece.t, placementPos.y, roomnum, 'b');
         }
 
     }
+  //  console.log(`${rooms[roomnum]} - ${roomnum}`);
     return roomnum;
 }
 //for (let i = 0; i < 25; i++) {
-addRoom(32, 32, 5000,'t');
+var pos = addRoom(mapWidth/2, mapWidth/2, 2500, 't');
 //}
 
 //for (let i = 0; i < 25; i++) {
