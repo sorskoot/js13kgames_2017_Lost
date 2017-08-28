@@ -40,6 +40,7 @@ var pieces = [
         2, 1, 1, 0, 0
     ],
 ];
+
 var mapWidth = 64;
 
 let rnd = m => ~~(Math.random() * m);
@@ -79,10 +80,10 @@ var mapContext = mapCanvas.getContext('2d');
 mapContext.fillStyle = "rgba(0, 0, 0, 0)";
 mapContext.fillRect(0, 0, mapWidth, mapWidth);
 
-console.log(mapContext.getImageData(32, 32, 1, 1).data.every(d => d === 0));
-mapContext.fillStyle = "rgba(255,255,255,255)";
-mapContext.fillRect(32, 32, 1, 1);
-console.log(mapContext.getImageData(32, 32, 1, 1).data.every(d => d === 0));
+// //console.log(mapContext.getImageData(32, 32, 1, 1).data.every(d => d === 0));
+// mapContext.fillStyle = "rgba(255,255,255,255)";
+// mapContext.fillRect(32, 32, 1, 1);
+// //console.log(mapContext.getImageData(32, 32, 1, 1).data.every(d => d === 0));
 
 var map = {
     tiles: Array(mapWidth * mapWidth).fill(0)
@@ -97,63 +98,80 @@ pieces[0].top = [2];
 var RoomsToBuild = 25;
 var rooms = [];
 
-var addRoom = function(px, py, roomnum, placement) {
-    let placementPos, tx, ty;
-    let currentPiece = pieces[2]; //rnd(pl)
-    switch (placement) {
-        case 't': //top
-            placementPos = { x: px - currentPiece.t, y: py + 1 };
+var addRoom = function (px, py, roomnum, placement) {
+    let placementPos, tx, ty, currentPiece;
+
+    for (let i = 0; i < 50; i++) {
+        currentPiece = pieces[rnd(pl)];
+        if(currentPiece[placement] !== undefined){
             break;
-        case 'b': //bottom               
-            placementPos = { x: px - currentPiece.b, y: py - currentPiece[1] };
-            break;
-        case 'l': //left
-            placementPos = { x: px - currentPiece[0], y: py - currentPiece.l };
-            break;
-        case 'r': //right
-            placementPos = { x: px + 1, y: py - currentPiece.r };
-            break;
-        default: //undefined
-            placementPos = { x: px, y: py };
+        }
     }
 
-    
+    if (currentPiece[placement] === undefined) {
+        console.log(`found undefined: ${placement}`)
+        return roomnum;
+    };
+
+    switch (placement) {
+
+        case 'b': //bottom               
+            placementPos = { x: px - currentPiece.b, y: py + currentPiece[1] };
+            break;
+        case 't': //top
+            placementPos = { x: px - currentPiece.t, y: py };
+            break;
+        case 'l': //left
+            placementPos = { x: px - currentPiece[0], y: py - currentPiece.r };
+            break;
+        case 'r': //right
+            placementPos = { x: px, y: py - currentPiece.l };
+            break;
+        // default: //undefined
+        //     placementPos = { x: px, y: py };
+    }
+
+
     currentPiece.slice(2).map((v, i) => {
         let y = ~~(i / currentPiece[0]);
         let x = i % currentPiece[0];
         ty = placementPos.y + y;
         tx = placementPos.x + x;
         //if (tp < mapWidth * mapWidth) { map.tiles[tp] = v; }
-        if(v){
-            mapContext.fillStyle = v===1?"#888":"#844";
+        if (v) {
+            mapContext.fillStyle = v === 1 ? "#888" : "#844";
             mapContext.fillRect(tx, ty, 1, 1);
         }
     });
 
-    // if (roomnum > 0) {
-    //     roomnum--;
-    //     rooms[roomnum] = rooms[roomnum] || '';
-    //     if (currentPiece.t !== undefined && placement != 't' && !~rooms[roomnum].indexOf('t')) {
-    //         rooms[roomnum] += 't';
-    //         roomnum = addRoom(toi(tox(placementPos) + currentPiece.t, toy(placementPos)), roomnum, 'b');
-    //     }
-    //     else if (currentPiece.b !== undefined && placement != 'b' && !~rooms[roomnum].indexOf('b')) {
-    //         rooms[roomnum] += 'b';
-    //         roomnum = addRoom(toi(tox(placementPos) + currentPiece.b, toy(placementPos)), roomnum, 't');
-    //     }
-    //     else if (currentPiece.r !== undefined && placement != 'r' && !~rooms[roomnum].indexOf('r')) {
-    //         rooms[roomnum] += 'r';
-    //         roomnum = addRoom(toi(tox(placementPos), toy(placementPos) + currentPiece.r), roomnum, 'l');
-    //     }
-    //     else if (currentPiece.l !== undefined && placement != 'l' && !~rooms[roomnum].indexOf('l')) {
-    //         rooms[roomnum] += 'l';
-    //         roomnum = addRoom(toi(tox(placementPos), toy(placementPos) + currentPiece.l), roomnum, 'r');
-    //     }
-    // }
-    // return roomnum;
+    if (roomnum > 0) {
+        roomnum--;
+        rooms[roomnum] = rooms[roomnum] || '';
+        if (currentPiece.b !== undefined && placement != 'b' && !~rooms[roomnum].indexOf('b')) {
+            rooms[roomnum] += 'b';
+            roomnum = addRoom(placementPos.x + currentPiece.b, placementPos.y + currentPiece[1], roomnum, 't');
+        }
+
+        if (currentPiece.t !== undefined && placement != 't' && !~rooms[roomnum].indexOf('t')) {
+            rooms[roomnum] += 't';
+            roomnum = addRoom(placementPos.x + currentPiece.t, placementPos.y, roomnum, 'b');
+        }
+
+        if (currentPiece.r !== undefined && placement != 'r' && !~rooms[roomnum].indexOf('r')) {
+            rooms[roomnum] += 'r';
+            roomnum = addRoom(placementPos.x, placementPos.y + currentPiece.l, roomnum, 'l');
+        }
+
+        if (currentPiece.l !== undefined && placement != 'l' && !~rooms[roomnum].indexOf('l')) {
+            rooms[roomnum] += 'l';
+            roomnum = addRoom(placementPos.x + currentPiece[0], placementPos.y + currentPiece.r, roomnum, 'r');
+        }
+
+    }
+    return roomnum;
 }
 //for (let i = 0; i < 25; i++) {
-addRoom(32,32,255);
+addRoom(32, 32, 5000,'t');
 //}
 
 //for (let i = 0; i < 25; i++) {
