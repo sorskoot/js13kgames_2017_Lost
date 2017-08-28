@@ -1,4 +1,4 @@
-
+/* global THREE, AFRAME */
 AFRAME.registerComponent('material-texture', {
   schema: { color: { type: 'color' }, src:{type:'map'} },
   /**
@@ -45,6 +45,6 @@ AFRAME.registerComponent('material-texture', {
    * On each frame, update the 'time' uniform in the shaders.
    */
   tick: function (t) {
-    this.material.uniforms.time.value = t / 1000;
+    this.material.uniforms.time.value = t / 1000; 
   }
 })
