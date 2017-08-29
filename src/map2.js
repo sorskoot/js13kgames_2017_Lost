@@ -32,10 +32,45 @@ var pieces = [
         [0, 1, 0],
         [0, 1, 0],
         [0, 2, 0],
+    ],
+    [
+        [0, 0, 0, 0, 0, 0, 0, 0],
+        [2, 1, 1, 1, 1, 1, 1, 2],
+        [0, 0, 0, 0, 0, 0, 0, 0],
+    ],
+    [
+        [0, 2, 0],
+        [0, 1, 0],
+        [0, 1, 0],
+        [0, 1, 0],
+        [0, 1, 0],
+        [0, 1, 0],
+        [0, 1, 0],
+        [0, 2, 0],
+    ],
+    [
+        [0, 0, 0, 0, 2, 0],
+        [0, 0, 0, 1, 1, 0],
+        [2, 1, 1, 1, 1, 0],
+        [0, 1, 1, 0, 1, 1],
+        [0, 1, 0, 0, 1, 1],
+        [0, 0, 1, 1, 1, 2],
+        [0, 1, 1, 0, 1, 0],
+        [0, 0, 0, 0, 2, 0],
+    ],
+    [
+        [0, 0, 0, 2, 0, 0],
+        [0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 1, 0, 0],
+        [2, 1, 1, 1, 1, 2],
+        [0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 1, 0, 0],
+        [0, 0, 0, 2, 0, 0],
     ]
 ];
 
-var mapWidth = 64;
+var mapWidth = 1024;
 
 let rnd = m => ~~(Math.random() * m);
 
@@ -63,8 +98,8 @@ mapCanvas.width = mapWidth;
 mapCanvas.height = mapWidth;
 
 //Temp during development
-mapCanvas.style.width = '512px';
-mapCanvas.style.height = '512px';
+mapCanvas.style.width = '1024px';
+mapCanvas.style.height = '1024px';
 mapCanvas.style.imageRendering = 'pixelated';
 document.body.appendChild(mapCanvas);
 document.body.style.backgroundColor = '#000';
@@ -74,29 +109,42 @@ var mapContext = mapCanvas.getContext('2d');
 mapContext.fillStyle = "rgba(0, 0, 0, 0)";
 mapContext.fillRect(0, 0, mapWidth, mapWidth);
 
+let first = true;
 var addRoom = (exit) => {
-    let piece = pieces[rnd(pieces.length)];
+    let piece;
     let exits = [];
     let clear = false;
-    for (let q = 0; q < 10; q++) {
-        //calcalate new position so that the '2s' go on top of eachother, but tiles not overlap
-        //if they overlap try a different '2'
-        //if there isn't a 2, try another piece
-        let targetX = exit.x - piece.exits[0].x;
-        let targetY = exit.y - piece.exits[0].y;
-        var imgData = mapContext.getImageData(targetX, targetY, piece.size.w, piece.size.h);
-        clear = imgData.data.every(d => d === 0)
-        if (clear) {
-            q = 1000;
+    let targetX;
+    let targetY;
+    let tries = 3;
+    do {
+        piece = pieces[rnd(pieces.length)];
+        for (var q = 0; q < piece.exits.length; q++) {
+            //calcalate new position so that the '2s' go on top of eachother, but tiles not overlap
+            //if they overlap try a different '2'
+            //if there isn't a 2, try another piece
+            targetX = exit.x - piece.exits[q].x;
+            targetY = exit.y - piece.exits[q].y;
+            var imgData = mapContext.getImageData(targetX, targetY, piece.size.w, piece.size.h);
+            clear = imgData.data.every(d => d === 0)
+            if (clear) {
+                break;
+            }
         }
-    }
+
+        tries--;
+    } while (tries > 0 && !clear);
     if (!clear) {
         return [];
     }
+   mapContext.fillStyle = "#4A4";
+    if (!first) mapContext.fillRect(targetX + piece.exits[q].x, targetY + piece.exits[q].y, 1, 1);
+    first = false;
+     mapContext.fillStyle = !first ? "#888" : "#A44";
     piece.forEach((i, py) => {
         i.forEach((j, px) => {
             if (j === 1) {
-                mapContext.fillStyle = "#888";
+
                 mapContext.fillRect(targetX + px, targetY + py, 1, 1);
             }
             if (j === 2) {
@@ -107,8 +155,8 @@ var addRoom = (exit) => {
     return exits;
 }
 
-let exits = [{ x: 32, y: 32 }];
-for (let i = 0; i < 3; i++) {
+let exits = [{ x: mapWidth / 2, y: mapWidth / 2 }];
+for (let i = 0; i < 15; i++) {
     let newExits = [];
     exits.forEach(exit => {
         let q = addRoom(exit);
