@@ -52,7 +52,7 @@ for (let i = 0; i < pieces.length; i++) {
     for (let j = 0; j < pieces[i].size.h; j++) {
         for (let h = 0; h < pieces[i].size.w; h++) {
             if (pieces[i][j][h] === 2) {
-                pieces[i].exits.push({ x: j, y: h });
+                pieces[i].exits.push({ x: h, y: j });
             }
         }
     }
@@ -74,21 +74,45 @@ var mapContext = mapCanvas.getContext('2d');
 mapContext.fillStyle = "rgba(0, 0, 0, 0)";
 mapContext.fillRect(0, 0, mapWidth, mapWidth);
 
-var addRoom = () => {
+var addRoom = (exit) => {
     let piece = pieces[rnd(pieces.length)];
-    draw(32, 32, piece);
-
-};
-
-var draw = (x, y, piece) => {
+    let exits = [];
+    let clear = false;
+    for (let q = 0; q < 10; q++) {
+        //calcalate new position so that the '2s' go on top of eachother, but tiles not overlap
+        //if they overlap try a different '2'
+        //if there isn't a 2, try another piece
+        let targetX = exit.x - piece.exits[0].x;
+        let targetY = exit.y - piece.exits[0].y;
+        var imgData = mapContext.getImageData(targetX, targetY, piece.size.w, piece.size.h);
+        clear = imgData.data.every(d => d === 0)
+        if (clear) {
+            q = 1000;
+        }
+    }
+    if (!clear) {
+        return [];
+    }
     piece.forEach((i, py) => {
         i.forEach((j, px) => {
-            if (j) {
-                mapContext.fillStyle = j === 1 ? "#888" : "#844";
-                mapContext.fillRect(x + px, y + py, 1, 1);
+            if (j === 1) {
+                mapContext.fillStyle = "#888";
+                mapContext.fillRect(targetX + px, targetY + py, 1, 1);
+            }
+            if (j === 2) {
+                exits.push({ x: targetX + px, y: targetY + py });
             }
         })
     });
+    return exits;
 }
 
-addRoom();
+let exits = [{ x: 32, y: 32 }];
+for (let i = 0; i < 3; i++) {
+    let newExits = [];
+    exits.forEach(exit => {
+        let q = addRoom(exit);
+        newExits = newExits.concat(q);
+    });
+    exits = newExits;
+}
