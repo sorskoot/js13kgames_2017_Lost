@@ -4,3 +4,15 @@
 - Movement
 - Battles
 - Reaching the Goal
+
+New Process for mapgen:
+1) Analyze pieces
+   - Add x,y positions in piece for exits
+2) Place tile and return list with exits
+   - create a list of the
+3) Go over the exits and try to place a new piece there
+    - loop until one fits
+    - update the list with exits without the exit that is used
+4) repeat step 3 X times
+    
+   
