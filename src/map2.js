@@ -16,6 +16,15 @@ var pieces = [
         [0, 0, 2, 0, 0]
     ],
     [
+        [0, 0, 2, 0, 0],
+        [0, 1, 1, 1, 1],
+        [0, 1, 1, 1, 0],
+        [2, 1, 1, 1, 2],
+        [0, 1, 1, 1, 0],
+        [1, 1, 1, 1, 0],
+        [1, 0, 2, 0, 0]
+    ],
+    [
         [0, 1, 1, 1, 0],
         [2, 1, 1, 1, 0],
         [0, 1, 0, 1, 0],
@@ -77,15 +86,30 @@ var pieces = [
         [0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0],
         [0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0],
         [0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0],
-        [0, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
         [0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0],
         [0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0],
         [0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0],
         [0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0],
+    ],
+    [
+        [0, 0, 0, 0, 0, 0, 2, 0, 0, 0, 0],
+        [0, 0, 0, 1, 1, 0, 1, 0, 0, 0, 0],
+        [0, 0, 1, 1, 1, 1, 1, 1, 0, 0, 0],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 0, 0],
+        [0, 0, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [2, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 2],
+        [0, 1, 1, 1, 1, 1, 1, 1, 1, 1, 0],
+        [1, 1, 1, 1, 0, 0, 1, 1, 1, 1, 0],
+        [1, 1, 1, 1, 0, 0, 1, 1, 1, 0, 0],
+        [0, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0],
     ]
 ];
 
-var mapWidth = 1024;
+var mapWidth = 256;
 
 let rnd = m => ~~(Math.random() * m);
 
@@ -95,6 +119,12 @@ for (let i = 0; i < pl; i++) {
     for (let j = 0; j < clone.length; j++)
         clone[j] = clone[j].slice().reverse();
     pieces.push(clone);
+    let clone2 = pieces[i].slice();
+    clone2 = clone2.reverse();
+    pieces.push(clone2);
+    let clone3 = clone.slice();
+    clone3 = clone3.reverse();
+    pieces.push(clone3);
 }
 for (let i = 0; i < pieces.length; i++) {
     pieces[i].size = { w: pieces[i][0].length, h: pieces[i].length };
@@ -125,13 +155,13 @@ mapContext.fillStyle = "rgba(0, 0, 0, 0)";
 mapContext.fillRect(0, 0, mapWidth, mapWidth);
 
 let first = true;
-var addRoom = (exit) => {
+var addRoom = (exit, special) => {
     let piece;
     let exits = [];
     let clear = false;
     let targetX;
     let targetY;
-    let tries = 3;
+    let tries = 25;
     do {
         piece = pieces[rnd(pieces.length)];
         for (var q = 0; q < piece.exits.length; q++) {
@@ -150,12 +180,23 @@ var addRoom = (exit) => {
         tries--;
     } while (tries > 0 && !clear);
     if (!clear) {
-        return [];
+        piece = [[1]];
+        piece.exits = [{}];
+        targetX = exit.x;
+        targetY = exit.y;
+        q = 0;
+        // return [];
     }
     mapContext.fillStyle = "#4A4";
-    if (!first) mapContext.fillRect(targetX + piece.exits[q].x, targetY + piece.exits[q].y, 1, 1);
-    first = false;
+    if (!first) mapContext.fillRect(targetX + piece.exits[q].x || 0, targetY + piece.exits[q].y || 0, 1, 1);
     mapContext.fillStyle = !first ? "#888" : "#A44";
+    if (special === 1) {
+        mapContext.fillStyle = "#F0F";
+    }
+    if (special === 2) {
+        mapContext.fillStyle = "#0FF";
+    }
+    first = false;
     piece.forEach((i, py) => {
         i.forEach((j, px) => {
             if (j === 1) {
@@ -169,13 +210,21 @@ var addRoom = (exit) => {
     });
     return exits;
 }
-
+let loops=10;
 let exits = [{ x: mapWidth / 2, y: mapWidth / 2 }];
-for (let i = 0; i < 25; i++) {
+for (let i = 0; i < loops; i++) {
     let newExits = [];
-    exits.forEach(exit => {
-        let q = addRoom(exit);
+    let special;
+    exits.forEach((exit, ind) => {
+        if (i == loops-1 && ind == exits.length - ~~(exits.length/3)) {
+            special = 1;
+        }
+        if (i == loops-1 && ind ==  ~~(exits.length/3)) {
+            special = 2;
+        }
+        let q = addRoom(exit, special);
         newExits = newExits.concat(q);
+        special = 0;
     });
     exits = newExits;
 }
