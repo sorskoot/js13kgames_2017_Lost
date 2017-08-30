@@ -67,6 +67,21 @@ var pieces = [
         [0, 0, 0, 1, 0, 0],
         [0, 0, 0, 1, 0, 0],
         [0, 0, 0, 2, 0, 0],
+    ],
+    [
+        [0, 0, 0, 0, 2, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 1, 0, 0, 0, 0, 0, 0],
+        [0, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0],
+        [2, 1, 1, 1, 1, 0, 1, 1, 2, 0, 0],
+        [0, 0, 0, 1, 1, 0, 0, 0, 1, 0, 0],
+        [0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0],
+        [0, 0, 1, 1, 0, 0, 0, 1, 1, 1, 0],
+        [0, 0, 1, 1, 0, 0, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 1, 2, 1, 1, 1, 1, 2],
+        [0, 1, 0, 1, 0, 1, 1, 1, 1, 1, 0],
+        [0, 1, 1, 1, 0, 0, 0, 1, 1, 1, 0],
+        [0, 0, 1, 1, 0, 0, 0, 0, 1, 0, 0],
+        [0, 0, 2, 0, 0, 0, 0, 0, 2, 0, 0],
     ]
 ];
 
@@ -137,10 +152,10 @@ var addRoom = (exit) => {
     if (!clear) {
         return [];
     }
-   mapContext.fillStyle = "#4A4";
+    mapContext.fillStyle = "#4A4";
     if (!first) mapContext.fillRect(targetX + piece.exits[q].x, targetY + piece.exits[q].y, 1, 1);
     first = false;
-     mapContext.fillStyle = !first ? "#888" : "#A44";
+    mapContext.fillStyle = !first ? "#888" : "#A44";
     piece.forEach((i, py) => {
         i.forEach((j, px) => {
             if (j === 1) {
@@ -156,7 +171,7 @@ var addRoom = (exit) => {
 }
 
 let exits = [{ x: mapWidth / 2, y: mapWidth / 2 }];
-for (let i = 0; i < 15; i++) {
+for (let i = 0; i < 25; i++) {
     let newExits = [];
     exits.forEach(exit => {
         let q = addRoom(exit);
