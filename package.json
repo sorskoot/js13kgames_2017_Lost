@@ -5,9 +5,10 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "http-server ./dist -p 1317",
+    "start": "http-server ./dist -p 1317 -c-1",
     "clean": "rm -rf dist/; mkdir -p dist",
-    "build": "set NODE_ENV=production && webpack --config webpack.config --progress --colors",
+    "buildProd": "SET NODE_ENV=production&& webpack --config webpack.config --progress --colors",
+    "build": "webpack --config webpack.config --progress --colors",
     "watch": "webpack --config webpack.config --colors --watch",
     "zip": "cd dist; zip -r ../dist.zip .; cd ..; wc -c dist.zip",
     "lint": "eslint ./src --fix",

@@ -1,6 +1,6 @@
 /* global THREE, AFRAME */
 AFRAME.registerComponent('material-texture', {
-  schema: { color: { type: 'color' }, src:{type:'map'} },
+  schema: { color: { type: 'color' }, src:{type:'map'},index:{type:'int'} },
   /**
    * Creates a new THREE.ShaderMaterial using the two shaders defined
    * in vertex.glsl and fragment.glsl.
@@ -12,11 +12,11 @@ AFRAME.registerComponent('material-texture', {
     this.material = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0.0 },
-        index: { value: 0 },
+        index: { value: this.data.index },
         DiffuseTexture: { value: new THREE.ImageUtils.loadTexture('./lost.png') },
         color: { value: new THREE.Color(data.color) },
         spriteDimensions: { value: { x: 8.0, y: 1.0 } },
-        repeat: { value: { x: 8.0, y: 8.0 } }
+        repeat: { value: { x: 1.0, y: 1.0 } }
       },
       vertexShader,
       fragmentShader
@@ -36,8 +36,8 @@ AFRAME.registerComponent('material-texture', {
   applyToMesh: function () {
     const mesh = this.el.getObject3D('mesh');
     if (mesh) {
-      this.material.uniforms.repeat.value.x =+this.el.getAttribute("width");
-      this.material.uniforms.repeat.value.y =+this.el.getAttribute("height");
+      this.material.uniforms.repeat.value.x =+this.el.getAttribute("width")||1;
+      this.material.uniforms.repeat.value.y =+this.el.getAttribute("height")||1;
       mesh.material = this.material;
     }
   },

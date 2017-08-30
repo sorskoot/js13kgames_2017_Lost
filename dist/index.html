@@ -45,30 +45,37 @@ void main(void)
 </script>
 </head>
 <body>
-        <a-scene  stats
-            fog="type: linear; color: #AAA;near:5;far:50"
-            inspector="url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js" class="fullscreen">
-            <a-assets>
-                <img id="my-texture" src="/lost.png">
-              </a-assets>
-              <a-entity camera="active:true;zoom:2;near:0.01;userHeight:1.6" 
-                look-controls="standing:true" position="0 6.18 7.97" 
-                rotation="-24.981916281119357 0.8022532292150734 0" 
-                scale="1 1 1" 
-                visible="true">
-                    <a-entity cursor="fuse: true; fuseTimeout: 500"
-            position="0 0 -1"
-            geometry="primitive: ring; radiusInner: 0.002; radiusOuter: 0.003"
-            material="color: black; shader: flat">
-  </a-entity>
-                  
-              </a-entity>
+    <!-- stats -->
+  <a-scene   id="scene"
+          
+            inspector="url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js" class="fullscreen"
+            game
+            >
+    <a-assets>
+      <img id="my-texture" src="/lost.png" />
+      <img id="sky" src="/lost_5.png" />
+      <a-mixin id="voxel"
+          geometry="primitive: box; height: 1; width: 1;depth:.1"
+          material-texture="src: #my-texture;index:3"
+          rotation="-90 0 0"
+          snap="offset: 0.5 0.5 0.5; snap: 0.5 0.5 0.5"></a-mixin>
+    </a-assets>
+    
+    <a-entity camera="active:true;zoom:2;near:0.01;userHeight:1.6" 
+              look-controls="standing:true" position="0 2 4" 
+              rotation="-25 0.8 0" 
+              scale="1 1 1" 
+              visible="true">
+      <a-entity cursor="fuse: true; fuseTimeout: 500"
+                position="0 0 -1"
+                geometry="primitive: ring; radiusInner: 0.002; radiusOuter: 0.003"
+                material="color: black; shader: flat">
+      </a-entity>              
+    </a-entity>
               
-            <a-box position="-1 0.5 -3" rotation="0 45 0" color="#4CC3D9"></a-box>
-            <a-sphere position="0 1.25 -5" radius="1.25" color="#EF2D5E"></a-sphere>
-            <a-cylinder position="1 0.75 -3" radius="0.5" height="1.5" color="#FFC65D"></a-cylinder>
-            <a-plane material-texture="color: blue; src: #my-texture" position="0 0 -4" rotation="-90 0 0" width="80" height="80" color="#7BC8A4" scale="" visible="" material="" geometry=""></a-plane>
-            <a-sky color="#ECECEC"></a-sky>
-          </a-scene>
+            <!-- <a-entity geometry="primitive: map; vertices: 1 1 -3, 3 1 -3, 2 2 -3"></a-entity>
+            <a-plane material-texture="color: blue; src: #my-texture" position="0 0 -4" rotation="-90 0 0" width="80" height="80" color="#7BC8A4" scale="" visible="" material="" geometry=""></a-plane> -->
+   
+  </a-scene>
 </body>
 </html>

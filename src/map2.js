@@ -1,6 +1,6 @@
 
 var generator = {
-    go: () => {
+    go: (mapWidth, depth) => {
         var pieces = [
             [
                 [0, 0, 2, 0, 0],
@@ -112,7 +112,7 @@ var generator = {
             ]
         ];
 
-        var mapWidth = 256;
+        // var mapWidth = 256;
 
         let rnd = m => ~~(Math.random() * m);
 
@@ -146,11 +146,11 @@ var generator = {
         mapCanvas.height = mapWidth;
 
         //Temp during development
-        mapCanvas.style.width = '1024px';
-        mapCanvas.style.height = '1024px';
-        mapCanvas.style.imageRendering = 'pixelated';
-        document.body.appendChild(mapCanvas);
-        document.body.style.backgroundColor = '#000';
+        // mapCanvas.style.width = '1024px';
+        // mapCanvas.style.height = '1024px';
+        // mapCanvas.style.imageRendering = 'pixelated';
+        // document.body.appendChild(mapCanvas);
+        // document.body.style.backgroundColor = '#000';
         //END
 
         var mapContext = mapCanvas.getContext('2d');
@@ -213,7 +213,7 @@ var generator = {
             });
             return exits;
         }
-        let loops = 10;
+        let loops = depth;
         let exits = [{ x: mapWidth / 2, y: mapWidth / 2 }];
         for (let i = 0; i < loops; i++) {
             let newExits = [];
@@ -231,6 +231,9 @@ var generator = {
             });
             exits = newExits;
         }
+
+        return mapContext;
     }
+
 }
-module.exports = generate;
+module.exports = generator;

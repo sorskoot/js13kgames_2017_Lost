@@ -6,7 +6,7 @@ var CompressionPlugin = require("compression-webpack-plugin");
 const UglifyESPlugin = require('uglifyes-webpack-plugin');
 
 var env = process.env.NODE_ENV || 'development';
-var isProduction = env === 'production';
+var isProduction = env == 'production';
 
 var plugins = [
   new webpack.DefinePlugin({
@@ -15,6 +15,7 @@ var plugins = [
 ];
 
 if (isProduction) {
+  console.log("running production build...");
   plugins = plugins.concat([
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.optimize.DedupePlugin(),
@@ -34,7 +35,7 @@ if (isProduction) {
 }
 
 module.exports = {
-  devtool: 'source-map',
+  devtool: 'inline-source-map',
 
   entry: {
     app: './src/index'
