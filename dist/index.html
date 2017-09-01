@@ -5,77 +5,98 @@
     <script src="b.js"></script>
     <!-- fragment shader -->
 <script id="fragment" type="x-shader/x-fragment">
+
 #define SPRITE_WIDTH 8.0
 #define SPRITE_HEIGHT 8.0
 
-precision mediump float;
-uniform vec2 vUv;
+precision highp float;
 
 // Uniform variables
-
 uniform sampler2D DiffuseTexture;
-//uniform sampler2D Lookup;
 uniform float index;
 uniform vec2 spriteDimensions;
+uniform vec3 fogColor;
 
 // Input variables
 varying vec2 FragTexcoord;
 
-void main(void)
+varying float fogDepth;
+uniform float fogStart;
+uniform float fogEnd;
+
+uniform vec2 vUv;
+
+void main()
 {
- // vec4 foo = texture2D(Lookup,vec2(0,0));
-  
   float u = clamp(floor(mod(FragTexcoord.x,1.0)*SPRITE_WIDTH)/SPRITE_WIDTH,0.0,1.0)/spriteDimensions.x+1.0/128.0+(index*1.0/8.0);
   float v = clamp(floor(mod(FragTexcoord.y,1.0)*SPRITE_HEIGHT)/SPRITE_HEIGHT,0.0,1.0)/spriteDimensions.y+1.0/16.0;
   
   vec2 UV = vec2(u, v);
+  vec4 texturedColor = texture2D(DiffuseTexture, vec2(UV.x, UV.y)); 
   
-  gl_FragColor = texture2D(DiffuseTexture, vec2(UV.x, UV.y));
+//  float fogFactor = whiteCompliment( exp2( - fogDensity * fogDensity * fogDepth * fogDepth * LOG2 ) );
+
+	float fogFactor = smoothstep( fogStart, fogEnd, fogDepth );
+  vec4 color = mix(texturedColor, vec4(fogColor,1.0), fogFactor);   
+   gl_FragColor =  color;
 }
 </script>
-<script id="vertex" type="x-shader/x-vertex">
+<script id="vertex" type="x-shader/x-vertex">  
+  precision highp float;
+
   varying vec2 FragTexcoord;  
-  
+  varying float fogDepth;
+
   uniform vec2 repeat;
 
+
+  float fogFactorLinear(float dist, float start, float end) {
+    return 1.0 - clamp((end - dist) / (end - start), 0.0, 1.0);
+  }
+  
   void main() {
     FragTexcoord = vec2(uv.x*repeat.x,uv.y*repeat.y) ;    
     gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+    
+    float fogDistance = length(gl_Position.xyz);
+    //fogAmount = fogFactorLinear(fogDistance, fogStart, fogEnd);
+    //fogAmount = fogFactorLinear(fogDistance, 1.0, 5.0);
+    fogDepth = -(modelViewMatrix * vec4( position, 1.0 )).z;    
   }
 </script>
 </head>
 <body>
-    <!-- stats -->
-  <a-scene   id="scene"
+    
+  <a-scene  stats id="scene"
           
-            inspector="url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js" class="fullscreen"
-            game
+            inspector="url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js" class="fullscreen"            
             >
     <a-assets>
       <img id="my-texture" src="/lost.png" />
       <img id="sky" src="/lost_5.png" />
       <a-mixin id="voxel"
-          geometry="primitive: box; height: 1; width: 1;depth:.1"
+          geometry="primitive: vox; height: 1; width: 1;"
           material-texture="src: #my-texture;index:3"
           rotation="-90 0 0"
           snap="offset: 0.5 0.5 0.5; snap: 0.5 0.5 0.5"></a-mixin>
     </a-assets>
     
-    <a-entity camera="active:true;zoom:2;near:0.01;userHeight:1.6" 
-              look-controls="standing:true" position="0 2 4" 
+    <a-entity camera="active:true;fov:90;zoom:1;near:0.01;far:30;userHeight:1.6" 
+              look-controls="standing:true" position="0 0 4" 
               rotation="-25 0.8 0" 
               scale="1 1 1" 
               visible="true">
       <a-entity cursor="fuse: true; fuseTimeout: 500"
                 position="0 0 -1"
                 geometry="primitive: ring; radiusInner: 0.002; radiusOuter: 0.003"
-                material="color: black; shader: flat">
+                material="color: black; shader: flat">      
       </a-entity>              
     </a-entity>
-              
+    <a-entity id="map" map></a-entity>              
             <!-- <a-entity geometry="primitive: map; vertices: 1 1 -3, 3 1 -3, 2 2 -3"></a-entity>
             <a-plane material-texture="color: blue; src: #my-texture" position="0 0 -4" rotation="-90 0 0" width="80" height="80" color="#7BC8A4" scale="" visible="" material="" geometry=""></a-plane> -->
-   
+            <a-sky src="#sky" material="color:#FFF;shader:flat;npot:true;src:#sky" 
+            position="0 0 0" rotation="0 0 0" scale="-1 1 1" visible="true" geometry="radius:20;primitive:sphere;segmentsWidth:8;segmentsHeight:8"></a-sky> 
   </a-scene>
 </body>
 </html>
