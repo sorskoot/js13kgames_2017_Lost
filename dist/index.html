@@ -17,6 +17,11 @@ uniform float index;
 uniform vec2 spriteDimensions;
 uniform vec3 fogColor;
 
+uniform vec3 tint;
+uniform float tintAmount;
+
+uniform float alphatest;
+
 // Input variables
 varying vec2 FragTexcoord;
 
@@ -26,6 +31,8 @@ uniform float fogEnd;
 
 uniform vec2 vUv;
 
+#define BlendAddf(base, blend) 		min(base + blend, 1.0)
+
 void main()
 {
   float u = clamp(floor(mod(FragTexcoord.x,1.0)*SPRITE_WIDTH)/SPRITE_WIDTH,0.0,1.0)/spriteDimensions.x+1.0/128.0+(index*1.0/8.0);
@@ -34,11 +41,11 @@ void main()
   vec2 UV = vec2(u, v);
   vec4 texturedColor = texture2D(DiffuseTexture, vec2(UV.x, UV.y)); 
   
-//  float fogFactor = whiteCompliment( exp2( - fogDensity * fogDensity * fogDepth * fogDepth * LOG2 ) );
-
 	float fogFactor = smoothstep( fogStart, fogEnd, fogDepth );
-  vec4 color = mix(texturedColor, vec4(fogColor,1.0), fogFactor);   
-   gl_FragColor =  color;
+  vec4 color = mix(texturedColor, vec4(fogColor,0.0), fogFactor);   
+  if ( color.a < alphatest ) discard;
+
+  gl_FragColor =  color,tint;
 }
 </script>
 <script id="vertex" type="x-shader/x-vertex">  
@@ -49,54 +56,84 @@ void main()
 
   uniform vec2 repeat;
 
-
-  float fogFactorLinear(float dist, float start, float end) {
-    return 1.0 - clamp((end - dist) / (end - start), 0.0, 1.0);
-  }
-  
+ 
   void main() {
     FragTexcoord = vec2(uv.x*repeat.x,uv.y*repeat.y) ;    
     gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
     
     float fogDistance = length(gl_Position.xyz);
-    //fogAmount = fogFactorLinear(fogDistance, fogStart, fogEnd);
-    //fogAmount = fogFactorLinear(fogDistance, 1.0, 5.0);
+    fogDepth = -(modelViewMatrix * vec4( position, 1.0 )).z;    
+  }
+</script>
+<script id="vertex-billboard" type="x-shader/x-vertex">  
+  precision highp float;
+
+  varying vec2 FragTexcoord;  
+  varying float fogDepth;
+
+  uniform vec2 repeat;
+
+ 
+  void main() {
+    FragTexcoord = vec2(uv.x*repeat.x,uv.y*repeat.y) ;   
+    mat4 modelView = modelViewMatrix;   
+    modelView[0][0] = 1.0;
+    modelView[0][1] = 0.0;
+    modelView[0][2] = 0.0;
+    modelView[2][0] = 0.0;
+    modelView[2][1] = 0.0;
+    modelView[2][2] = 1.0;
+    gl_Position = projectionMatrix * (modelView) * vec4(position, 1.0 );
+    
+    float fogDistance = length(gl_Position.xyz);
     fogDepth = -(modelViewMatrix * vec4( position, 1.0 )).z;    
   }
 </script>
 </head>
-<body>
-    
+<body style="background-color:#000">    
   <a-scene  stats id="scene"
-          
+  renderer="clearColor: #222"
             inspector="url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js" class="fullscreen"            
             >
     <a-assets>
       <img id="my-texture" src="/lost.png" />
       <img id="sky" src="/lost_5.png" />
       <a-mixin id="voxel"
-          geometry="primitive: vox; height: 1; width: 1;"
-          material-texture="src: #my-texture;index:3"
+          geometry="primitive: plane; height: 1; width: 1;"
+          mytexture="index:3"
           rotation="-90 0 0"
           snap="offset: 0.5 0.5 0.5; snap: 0.5 0.5 0.5"></a-mixin>
     </a-assets>
     
-    <a-entity camera="active:true;fov:90;zoom:1;near:0.01;far:30;userHeight:1.6" 
-              look-controls="standing:true" position="0 0 4" 
+    <a-entity camera="active:true;fov:90;zoom:.8;near:0.01;far:15;userHeight:1.2" 
+              look-controls="standing:true" position="0 0 2" 
               rotation="-25 0.8 0" 
               scale="1 1 1" 
               visible="true">
-      <a-entity cursor="fuse: true; fuseTimeout: 500"
-                position="0 0 -1"
-                geometry="primitive: ring; radiusInner: 0.002; radiusOuter: 0.003"
-                material="color: black; shader: flat">      
-      </a-entity>              
+              <a-entity position="0 0 -.5"
+              geometry="primitive: ring; radiusOuter: 0.003;
+                        radiusInner: 0.002;"
+              material="color: red; shader: flat"
+              cursor="maxDistance: 2; fuse: true">
+      <a-animation begin="click" easing="ease-in" attribute="scale"
+           fill="backwards" from="0.1 0.1 0.1" to="1 1 1" dur="150"></a-animation>
+      <a-animation begin="fusing" easing="ease-in" attribute="scale"
+           fill="forwards" from="1 1 1" to="0.1 0.1 0.1" dur="1500"></a-animation>
     </a-entity>
-    <a-entity id="map" map></a-entity>              
+    </a-entity>
+    <a-entity id="mapgeo" map></a-entity>      
+    
+    <a-entity id="player" position="0 .25 0" geometry="primitive: plane; height: .5; width: .5;"  
+            billboard-texture="index:1"></a-entity>
+    <a-entity id="enemy" position="2 .25 -2" geometry="primitive: plane; height: .5; width: .5;"  
+            billboard-texture="index:2"></a-entity>
+    <a-entity id="enemy2" position="-2 .25 1" geometry="primitive: plane; height: .5; width: .5;"  
+            billboard-texture="index:2"></a-entity>
+            <!-- material-texture="src: #my-texture;index:3" -->
             <!-- <a-entity geometry="primitive: map; vertices: 1 1 -3, 3 1 -3, 2 2 -3"></a-entity>
             <a-plane material-texture="color: blue; src: #my-texture" position="0 0 -4" rotation="-90 0 0" width="80" height="80" color="#7BC8A4" scale="" visible="" material="" geometry=""></a-plane> -->
-            <a-sky src="#sky" material="color:#FFF;shader:flat;npot:true;src:#sky" 
-            position="0 0 0" rotation="0 0 0" scale="-1 1 1" visible="true" geometry="radius:20;primitive:sphere;segmentsWidth:8;segmentsHeight:8"></a-sky> 
+            <!-- <a-sky src="#sky" material="color:#FFF;shader:flat;npot:true;src:#sky" 
+            position="0 0 0" rotation="0 0 0" scale="-1 1 1" visible="true" geometry="radius:15;primitive:sphere;segmentsWidth:8;segmentsHeight:8"></a-sky>  -->
   </a-scene>
 </body>
 </html>

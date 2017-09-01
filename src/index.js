@@ -1,19 +1,39 @@
+window.t = new THREE.ImageUtils.loadTexture('./lost.png');
+
 require('./myShader.js');
-require('./comp-map');
+require('./billboardShader');
 const mapGen = require("./map2");
 
-window.globalGeo = new THREE.Geometry();
 
-AFRAME.registerGeometry('vox',{
-    schema: {
-        height: {default: 1, min: 0},
-        width: {default: 1, min: 0}
-      },    
-      init: function (data) {
+AFRAME.registerGeometry('mapgeo', {
+    schema: {},
+    init: function (data) {
         //this.geometry =  new THREE.PlaneGeometry(data.width, data.height, 1,1);
-        this.geometry = new THREE.Geometry();
-        this.geometry.fromBufferGeometry(  new THREE.PlaneBufferGeometry(data.width, data.height, 1,1))
-        //globalGeo.merge(this.geometry);
+        
+        let size = 64;
+        let depth = 8;
+        this.mapContext = mapGen.go(size, depth);
+
+        var globalGeo = new THREE.Geometry();
+        // let world = document.createElement("a-entity")
+        let worldData = this.mapContext.getImageData(0, 0, size, size);
+
+        for (let i = 0; i < size; i++) {
+            for (let j = 0; j < size; j++) {
+                if (worldData.data[(i + size * j) * 4] != 0) {
+                    var geo = new THREE.PlaneGeometry(1, 1)
+                    geo.rotateX(-Math.PI/2);
+                    geo.translate(i - (size / 2), 0, j - (size / 2));                   
+                    globalGeo.merge(geo);
+                }
+            }
+        }
+        // globalGeo.computeBoundingBox();        
+        // globalGeo.mergeVertices();
+        // globalGeo.computeFaceNormals();
+        // globalGeo.computeVertexNormals();
+        this.geometry = globalGeo;
+
     }
 });
 AFRAME.registerComponent('map', {
@@ -33,16 +53,25 @@ AFRAME.registerComponent('map', {
                 if (worldData.data[(i + size * j) * 4] != 0) {
 
                     let plane = document.createElement("a-entity")
-                    // if (Math.random() > .5) {
-                    //     plane.setAttribute("material-texture", "src: #my-texture;index:0");
-                    // }
+                     if (Math.random() > .5) {
+                         plane.setAttribute("mytexture", "src: #my-texture;index:0");
+                     }
+                    //  plane.addEventListener('mouseenter', function () {
+                    //     plane.setAttribute("mytexture", "tintAmount:0.5");
+                    //   });
+                    //   plane.addEventListener('mouseleave', function () {
+                    //     plane.setAttribute("mytexture", "tintAmount:0.5");
+                    //   });
+                      
                     plane.setAttribute('position', `${i - (size / 2)} 0 ${j - (size / 2)}`);
                     plane.setAttribute('mixin', 'voxel');
                     world.appendChild(plane);
                 }
             }
         }
+        
         this.el.appendChild(world);
+        
         // let sky = document.createElement('a-sky')
         // sky.setAttribute("src", "#sky");
         // sky.setAttribute('material',)

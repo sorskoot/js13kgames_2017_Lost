@@ -1,38 +1,30 @@
 /* global THREE, AFRAME */
-AFRAME.registerComponent('mytexture', {
+AFRAME.registerComponent('billboard-texture', {
   schema: {
-    color:
-    {
-      type: 'color'
-    },
-    index: { type: 'int' }
+    index:{type:'int'}
   },
-  /**
-   * Creates a new THREE.ShaderMaterial using the two shaders defined
-   * in vertex.glsl and fragment.glsl.
-   */
   init: function () {
-    const data = this.data;
+    const data = this.data;    
     var fragmentShader = document.getElementById('fragment').textContent;
-    var vertexShader = document.getElementById('vertex').textContent;
-
+    var vertexShader = document.getElementById('vertex-billboard').textContent;
+    
     this.material = new THREE.ShaderMaterial({
       uniforms: {
         time: { value: 0.0 },
         index: { value: this.data.index },
-        DiffuseTexture: { value: window.t },
+        DiffuseTexture: { value: window.t},
         color: { value: new THREE.Color(data.color) },
         spriteDimensions: { value: { x: 8.0, y: 1.0 } },
         repeat: { value: { x: 1.0, y: 1.0 } },
-        fogStart: { value: 5 },
-        fogEnd: { value: 15 },
-        fogColor: { value: new THREE.Color(0, 0, 0) },
-        tint: { value: new THREE.Color(255, 255, 255) },
-        tintAmount: { value: 0 }
+        fogStart:{value:5},
+        fogEnd:{value:15},
+        alphatest:{value:0.9},
+        fogColor:{value: new THREE.Color(0,0,0)}
       },
       vertexShader,
       fragmentShader
     });
+    this.material.blending = THREE.MultiplyBlending;
     this.applyToMesh();
     this.el.addEventListener('model-loaded', () => this.applyToMesh());
   },
@@ -48,8 +40,8 @@ AFRAME.registerComponent('mytexture', {
   applyToMesh: function () {
     const mesh = this.el.getObject3D('mesh');
     if (mesh) {
-      this.material.uniforms.repeat.value.x = +this.el.getAttribute("width") || 1;
-      this.material.uniforms.repeat.value.y = +this.el.getAttribute("height") || 1;
+      this.material.uniforms.repeat.value.x =+this.el.getAttribute("width")||1;
+      this.material.uniforms.repeat.value.y =+this.el.getAttribute("height")||1;
       mesh.material = this.material;
     }
   },
