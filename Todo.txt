@@ -1,6 +1,5 @@
+
 - Build process => Shaders from external files into code
-- Get Shaders to work
-- Generate world
 - Movement
 - Battles
 - Reaching the Goal
@@ -16,3 +15,6 @@ New Process for mapgen:
 4) repeat step 3 X times
     
    
+done:
+- Get Shaders to work
+- Generate world
