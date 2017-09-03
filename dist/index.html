@@ -76,10 +76,15 @@ void main()
  
   void main() {
     FragTexcoord = vec2(uv.x*repeat.x,uv.y*repeat.y) ;   
+    
+     
     mat4 modelView = modelViewMatrix;   
     modelView[0][0] = 1.0;
     modelView[0][1] = 0.0;
     modelView[0][2] = 0.0;
+		modelView[1][0] = 0.0;
+    modelView[1][1] = 1.0;
+    modelView[1][2] = 0.0;
     modelView[2][0] = 0.0;
     modelView[2][1] = 0.0;
     modelView[2][2] = 1.0;
@@ -99,6 +104,7 @@ void main()
       <img id="my-texture" src="/lost.png" />
       <img id="sky" src="/lost_5.png" />
       <a-mixin id="voxel"
+         
           geometry="primitive: plane; height: 1; width: 1;"
           mytexture="index:3"
           rotation="-90 0 0"
@@ -110,15 +116,16 @@ void main()
               rotation="-25 0.8 0" 
               scale="1 1 1" 
               visible="true">
-              <a-entity position="0 0 -.5"
-              geometry="primitive: ring; radiusOuter: 0.003;
-                        radiusInner: 0.002;"
+      <a-entity position="0 0 -.5"
+              geometry="primitive: ring; radiusOuter: 0.009;
+                        radiusInner: 0.006;"
               material="color: red; shader: flat"
-              cursor="maxDistance: 2; fuse: true">
+              raycaster="far:3;objects: .floor""
+              cursor="maxDistance: 2; fuse: true;fuseTimeout: 1000">
       <a-animation begin="click" easing="ease-in" attribute="scale"
            fill="backwards" from="0.1 0.1 0.1" to="1 1 1" dur="150"></a-animation>
       <a-animation begin="fusing" easing="ease-in" attribute="scale"
-           fill="forwards" from="1 1 1" to="0.1 0.1 0.1" dur="1500"></a-animation>
+           fill="forwards" from="1 1 1" to="1.5 1.5 1.5" dur="1500"></a-animation>
     </a-entity>
     </a-entity>
     <a-entity id="mapgeo" map></a-entity>      
