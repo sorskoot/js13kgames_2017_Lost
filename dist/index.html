@@ -45,7 +45,7 @@ void main()
   
   float fogFactor = smoothstep( fogStart, fogEnd, fogDepth );
   vec4 color;
-  if(texturedColor.a > 0.0 && texturedColor.x == texturedColor.y && texturedColor.x == texturedColor.z){
+  if( lookupIndex >= 0.0 && texturedColor.a > 0.0 && texturedColor.x == texturedColor.y && texturedColor.x == texturedColor.z){
     float ind = texturedColor.x; 
     float y = 1.0-(lookupIndex*(1.0/24.0));
 		texturedColor = texture2D(Lookup,vec2(ind, y));  
@@ -111,8 +111,6 @@ void main()
             inspector="url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js" class="fullscreen"            
             >
     <a-assets>
-      <img id="my-texture" src="/lost.png" />
-      <img id="sky" src="/lost_5.png" />
       <a-mixin id="voxel"         
           geometry="primitive: plane; height: 1; width: 1;"
           mytexture="index:0"
@@ -124,7 +122,7 @@ void main()
     <a-entity id="mapgeo" map></a-entity>      
     
     <a-entity id="player" position="0 .25 0" geometry="primitive: plane; height: .5; width: .5"  
-            billboard-texture="index:1;lookup:0">
+            billboard-texture="index:1;lookup:-1">
           
             <a-entity camera="active:true;fov:90;zoom:.8;near:0.01;far:15;userHeight:1.2" 
             look-controls="standing:true" position="0 0 2" 
@@ -143,7 +141,7 @@ void main()
          fill="forwards" from="1 1 1" to="1.5 1.5 1.5" dur="1500"></a-animation>
   </a-entity>
   </a-entity>
-  
+
           </a-entity>
     <a-entity id="enemy" position="2 .25 -2" geometry="primitive: plane; height: .5; width: .5;"  
             billboard-texture="index:2;lookup:6"></a-entity>

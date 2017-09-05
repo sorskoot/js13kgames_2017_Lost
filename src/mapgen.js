@@ -143,13 +143,12 @@ var generator = {
         mapCanvas.width = mapWidth;
         mapCanvas.height = mapWidth;
 
-        //Temp during development
-        // mapCanvas.style.width = '1024px';
-        // mapCanvas.style.height = '1024px';
-        // mapCanvas.style.imageRendering = 'pixelated';
-        // document.body.appendChild(mapCanvas);
-        // document.body.style.backgroundColor = '#000';
-        //END
+        // Temp during development
+        mapCanvas.style.width = '1024px';
+        mapCanvas.style.height = '1024px';
+        mapCanvas.style.imageRendering = 'pixelated';
+        document.body.appendChild(mapCanvas);
+        // END
 
         var mapContext = mapCanvas.getContext('2d');
         mapContext.fillStyle = "rgba(0, 0, 0, 0)";
@@ -188,14 +187,14 @@ var generator = {
                 q = 0;
                 // return [];
             }
-            mapContext.fillStyle = "#4A4";
+            mapContext.fillStyle = "#400";
             if (!first) mapContext.fillRect(targetX + piece.exits[q].x || 0, targetY + piece.exits[q].y || 0, 1, 1);
-            mapContext.fillStyle = !first ? "#888" : "#A44";
+            mapContext.fillStyle = !first ? "#400" : "#600";
             if (special === 1) {
-                mapContext.fillStyle = "#F0F";
+                mapContext.fillStyle = "#E00";
             }
             if (special === 2) {
-                mapContext.fillStyle = "#0FF";
+                mapContext.fillStyle = "#A00";
             }
             first = false;
             piece.forEach((i, py) => {

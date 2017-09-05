@@ -1,6 +1,7 @@
 
-- Build process => Shaders from external files into code
-- Movement
+- Biomes
+- Object placement
+- Enemy Turns
 - Battles
 - Reaching the Goal
 
