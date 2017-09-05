@@ -15,7 +15,7 @@ AFRAME.registerComponent('billboard-texture', {
         index: { value: this.data.index },
         DiffuseTexture: { value: window.t},
         color: { value: new THREE.Color(data.color) },
-        spriteDimensions: { value: { x: 8.0, y: 1.0 } },
+        spriteDimensions: { value: { x: 16.0, y: 1.0 } },
         repeat: { value: { x: 1.0, y: 1.0 } },
         Lookup: { value: window.pal },    
         lookupIndex:{value:data.lookup},

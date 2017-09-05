@@ -24,7 +24,7 @@ AFRAME.registerComponent('mytexture', {
         DiffuseTexture: { value: window.t },
         Lookup: { value: window.pal },
         color: { value: new THREE.Color(data.color) },
-        spriteDimensions: { value: { x: 8.0, y: 1.0 } },
+        spriteDimensions: { value: { x: 16.0, y: 1.0 } },
         repeat: { value: { x: 1.0, y: 1.0 } },
         fogStart: { value: 5 },
         fogEnd: { value: 15 },
