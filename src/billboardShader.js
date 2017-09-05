@@ -1,7 +1,8 @@
 /* global THREE, AFRAME */
 AFRAME.registerComponent('billboard-texture', {
   schema: {
-    index:{type:'int'}
+    index:{type:'int'},
+    lookup: { type: 'int', default: 0 }
   },
   init: function () {
     const data = this.data;    
@@ -16,6 +17,8 @@ AFRAME.registerComponent('billboard-texture', {
         color: { value: new THREE.Color(data.color) },
         spriteDimensions: { value: { x: 8.0, y: 1.0 } },
         repeat: { value: { x: 1.0, y: 1.0 } },
+        Lookup: { value: window.pal },    
+        lookupIndex:{value:data.lookup},
         fogStart:{value:10},
         fogEnd:{value:15},
         alphatest:{value:0.95},

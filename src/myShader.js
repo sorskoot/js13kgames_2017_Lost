@@ -5,7 +5,8 @@ AFRAME.registerComponent('mytexture', {
     {
       type: 'color'
     },
-    index: { type: 'int' }
+    index: { type: 'int' },
+    lookup: { type: 'int', default: 0 }
   },
   /**
    * Creates a new THREE.ShaderMaterial using the two shaders defined
@@ -21,11 +22,13 @@ AFRAME.registerComponent('mytexture', {
         time: { value: 0.0 },
         index: { value: this.data.index },
         DiffuseTexture: { value: window.t },
+        Lookup: { value: window.pal },
         color: { value: new THREE.Color(data.color) },
         spriteDimensions: { value: { x: 8.0, y: 1.0 } },
         repeat: { value: { x: 1.0, y: 1.0 } },
         fogStart: { value: 5 },
         fogEnd: { value: 15 },
+        lookupIndex:{value:data.lookup},
         fogColor: { value: new THREE.Color(0, 0, 0) },
         tint: { value: new THREE.Color(255, 255, 255) },
         tintAmount: { value: 0 }
@@ -41,6 +44,7 @@ AFRAME.registerComponent('mytexture', {
    */
   update: function () {
     this.material.uniforms.index.value = this.data.index;
+    this.material.uniforms.lookupIndex.value=this.data.lookup;
   },
   /**
    * Apply the material to the current entity.

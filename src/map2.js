@@ -114,8 +114,6 @@ var generator = {
 
         // var mapWidth = 256;
 
-        let rnd = m => ~~(Math.random() * m);
-
         let pl = pieces.length;
         for (let i = 0; i < pl; i++) {
             let clone = pieces[i].slice();

@@ -1,6 +1,5 @@
-window.t = new THREE.ImageUtils.loadTexture('./lost.png');
-
-require('./myShader.js');
+require('./global')
+require('./myShader');
 require('./billboardShader');
 const mapGen = require("./map2");
 
@@ -49,9 +48,9 @@ AFRAME.registerComponent('map', {
 
                     let plane = document.createElement("a-entity")
                     plane.classList.add("floor");
-                     if (Math.random() > .5) {
-                         plane.setAttribute("mytexture", "src: #my-texture;index:0");
-                     }
+                     
+                    plane.setAttribute("mytexture", "src: #my-texture;index:0;lookup:"+rnd(6));
+                     
                       plane.addEventListener('click', function () {
                          plane.setAttribute("mytexture", "src: #my-texture;index:4");
                        });

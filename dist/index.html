@@ -13,6 +13,8 @@ precision highp float;
 
 // Uniform variables
 uniform sampler2D DiffuseTexture;
+uniform sampler2D Lookup;
+uniform float lookupIndex;
 uniform float index;
 uniform vec2 spriteDimensions;
 uniform vec3 fogColor;
@@ -41,11 +43,19 @@ void main()
   vec2 UV = vec2(u, v);
   vec4 texturedColor = texture2D(DiffuseTexture, vec2(UV.x, UV.y)); 
   
-	float fogFactor = smoothstep( fogStart, fogEnd, fogDepth );
-  vec4 color = mix(texturedColor, vec4(fogColor,0.0), fogFactor);   
+  float fogFactor = smoothstep( fogStart, fogEnd, fogDepth );
+  vec4 color;
+  if(texturedColor.a > 0.0 && texturedColor.x == texturedColor.y && texturedColor.x == texturedColor.z){
+    float ind = texturedColor.x; 
+    float y = 1.0-(lookupIndex*(1.0/24.0));
+		texturedColor = texture2D(Lookup,vec2(ind, y));  
+	}//else{
+  
+ color = mix(texturedColor, vec4(fogColor,0.0), fogFactor);   
+  //}
   if ( color.a < alphatest ) discard;
 
-  gl_FragColor =  color,tint;
+  gl_FragColor =  color;
 }
 </script>
 <script id="vertex" type="x-shader/x-vertex">  
@@ -103,10 +113,9 @@ void main()
     <a-assets>
       <img id="my-texture" src="/lost.png" />
       <img id="sky" src="/lost_5.png" />
-      <a-mixin id="voxel"
-         
+      <a-mixin id="voxel"         
           geometry="primitive: plane; height: 1; width: 1;"
-          mytexture="index:3"
+          mytexture="index:0"
           rotation="-90 0 0"
           snap="offset: 0.5 0.5 0.5; snap: 0.5 0.5 0.5"></a-mixin>
     </a-assets>
@@ -120,7 +129,7 @@ void main()
               geometry="primitive: ring; radiusOuter: 0.009;
                         radiusInner: 0.006;"
               material="color: red; shader: flat"
-              raycaster="far:3;objects: .floor""
+              raycaster="far:3;objects: .floor"
               cursor="maxDistance: 2; fuse: true;fuseTimeout: 1000">
       <a-animation begin="click" easing="ease-in" attribute="scale"
            fill="backwards" from="0.1 0.1 0.1" to="1 1 1" dur="150"></a-animation>
@@ -130,8 +139,8 @@ void main()
     </a-entity>
     <a-entity id="mapgeo" map></a-entity>      
     
-    <a-entity id="player" position="0 .25 0" geometry="primitive: plane; height: .5; width: .5;"  
-            billboard-texture="index:1"></a-entity>
+    <a-entity id="player" position="0 .25 0" geometry="primitive: plane; height: .5; width: .5"  
+            billboard-texture="index:1;lookup:0"></a-entity>
     <a-entity id="enemy" position="2 .25 -2" geometry="primitive: plane; height: .5; width: .5;"  
             billboard-texture="index:2"></a-entity>
     <a-entity id="enemy2" position="-2 .25 1" geometry="primitive: plane; height: .5; width: .5;"  
