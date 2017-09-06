@@ -2,7 +2,7 @@
 AFRAME.registerComponent('billboard-texture', {
   schema: {
     index:{type:'int'},
-    lookup: { type: 'int', default: 0 }
+    lookup: { type: 'int', default: -1 }
   },
   init: function () {
     const data = this.data;    

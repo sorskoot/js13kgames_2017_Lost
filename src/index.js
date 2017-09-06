@@ -1,4 +1,5 @@
-require('./global')
+require('./global');
+require('./data');
 require('./myShader');
 require('./billboardShader');
 require('./mapcomp');
