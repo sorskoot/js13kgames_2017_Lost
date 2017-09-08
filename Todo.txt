@@ -1,21 +1,23 @@
-
-- Biomes
+Must have:
 - Object placement
+    - with content
 - Enemy Turns
 - Battles
 - Reaching the Goal
 
-New Process for mapgen:
-1) Analyze pieces
-   - Add x,y positions in piece for exits
-2) Place tile and return list with exits
-   - create a list of the
-3) Go over the exits and try to place a new piece there
-    - loop until one fits
-    - update the list with exits without the exit that is used
-4) repeat step 3 X times
-    
-   
+Should Have:
+- Biomes
+- camera follow / rubber banding
+
+Would Like:
+- begin with the camera pointed higher so you don't start moving
+- fading van sprites
+
+Could Have.
+- better Biomes
+- sound fx
+- graphic fx
+
 done:
 - Get Shaders to work
 - Generate world
