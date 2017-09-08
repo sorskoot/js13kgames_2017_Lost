@@ -1,14 +1,11 @@
 Must have:
-- Object placement
-    - items 
-    - enemies
-    - weapons
+- Object placement  
     - game goal
-- Enemy Turns
 - Battles
 - Reaching the Goal
 
 Should Have:
+- Some AI
 - Biomes
 - Health indication
 - Weapon/shield indication
@@ -28,3 +25,8 @@ Could Have.
 done:
 - Get Shaders to work
 - Generate world
+- placement
+    - items 
+    - enemies
+    - weapons
+- Enemy Turns
