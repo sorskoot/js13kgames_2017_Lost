@@ -1,9 +1,11 @@
 const mapGen = require("./mapgen");
 
+const size = 128;
+const depth = 7;
+
 AFRAME.registerComponent('map', {
     init: function () {
-        const size = 128;
-        const depth = 7;
+
         this.mapContext = mapGen.go(size, depth);
         let world = document.createElement("a-entity");
         let worldData = this.mapContext.getImageData(0, 0, size, size);
@@ -36,37 +38,88 @@ AFRAME.registerComponent('map', {
             }
         }
 
+        this.el.appendChild(world);
+        this.el.appendChild(this.addItems());
+        this.el.appendChild(this.addMobs());
+    },
+
+    randomPlace: function (minDistance = 0) {
+        let x, y, c;
+        do {
+            x = window.rnd(size);
+            y = window.rnd(size);
+            c = this.mapContext.getImageData(x, y, 1, 1);
+        } while (c.data.every(p => p == 0));
+        return { x, y, c };
+    },
+    getWeighted: function (list) {
+        let f = false, item;
+        do {
+            item = list[rnd(list.length)];
+            f = rnd(100) < item.c;
+        } while (!f)
+        return item;
+    },
+    addItems: function () {
         let items = document.createElement("a-entity");
-        for (let i = 0; i < 25; i++) {
-            let b = document.createElement("a-entity"), x, y, c, tx, ty;
-            do {
-                x = window.rnd(size);
-                y = window.rnd(size);
-                c = this.mapContext.getImageData(x, y, 1, 1);
-            } while (c.data.every(p => p == 0));
-      
+        for (let i = 0; i < 150; i++) {
+            let b = document.createElement("a-entity"), tx, ty;
+            let p = this.randomPlace();
+            let item = this.getWeighted(D.items);
             // 0x4X are bags
-            //     0x41 = heart
+            //     0x41 = heart                         
             //     0x42 = sword iron
             //     0x43 = sword gold
-            //     0x44 = sword diamond
-            //     0x45 = shield iron
-            c.data[1] = 0x41; 
-            c.data[3] = 255;
-            this.mapContext.putImageData(c, x, y);
+            //     0x44 = sword diamond                         
+            //     0x45 = shield iron                           
+            //     0x46 = shield gold
+            //     0x47 = shield diamond                        
+            p.c.data[1] = 0x41;
+            this.mapContext.putImageData(p.c, p.x, p.y);
 
-            tx = x - size / 2;
-            ty = y - size / 2;
+            tx = p.x - size / 2;
+            ty = p.y - size / 2;
             var d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(tx, ty));
 
-            b.setAttribute("billboard-texture", "index:13;lookup:-1");
+            b.setAttribute("billboard-texture", { index: item.s, lookup: item.i });
             b.setAttribute('position', `${tx} .25 ${ty}`);
             b.setAttribute('mixin', 'spr');
-            b.data = { dist: d };
+            b.id = `b${p.x}-${p.y}`;
+            b.data = item;
             items.appendChild(b);
         }
+        return items;
+    },
+    addMobs: function () {
+        let items = document.createElement("a-entity");
+        for (let i = 0; i < 150; i++) {
+            let b = document.createElement("a-entity"), tx, ty;
 
-        this.el.appendChild(world);
-        this.el.appendChild(items);
+            //  let ind = rnd(3);
+            let mob = this.getWeighted(D.mobs), p, d;
+            do {
+                p = this.randomPlace();
+                tx = p.x - size / 2;
+                ty = p.y - size / 2;
+                d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(tx, ty));
+            } while (mob.m >= d);
+            // 0x4X are Enemies
+            //     0x41 = Green
+            //     0x42 = Purple
+            //       p.c.data[2] = 0x41 + ind;
+            this.mapContext.putImageData(p.c, p.x, p.y);
+
+
+
+            b.setAttribute("billboard-texture", { index: 2, lookup: mob.i });
+            b.setAttribute('position', `${tx} .25 ${ty}`);
+            b.setAttribute('mixin', 'spr');
+            b.id = `e${p.x}-${p.y}`;
+            b.data = {
+                health: rnd(mob.h[1]) + mob.h[0],
+            }
+            items.appendChild(b);
+        }
+        return items;
     }
 });

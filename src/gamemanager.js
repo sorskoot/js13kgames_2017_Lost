@@ -74,3 +74,11 @@ AFRAME.registerComponent('gamemanager', {
     }
 });
 
+AFRAME.registerComponent('player',{
+
+});
+
+AFRAME.registerComponent('mob',{
+    
+});
+
