@@ -45,7 +45,13 @@ AFRAME.registerComponent('map', {
                 c = this.mapContext.getImageData(x, y, 1, 1);
             } while (c.data.every(p => p == 0));
       
-            c.data[1] = 0x44;
+            // 0x4X are bags
+            //     0x41 = heart
+            //     0x42 = sword iron
+            //     0x43 = sword gold
+            //     0x44 = sword diamond
+            //     0x45 = shield iron
+            c.data[1] = 0x41; 
             c.data[3] = 255;
             this.mapContext.putImageData(c, x, y);
 
@@ -53,7 +59,7 @@ AFRAME.registerComponent('map', {
             ty = y - size / 2;
             var d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(tx, ty));
 
-            b.setAttribute("billboard-texture", "index:3;lookup:-1");
+            b.setAttribute("billboard-texture", "index:13;lookup:-1");
             b.setAttribute('position', `${tx} .25 ${ty}`);
             b.setAttribute('mixin', 'spr');
             b.data = { dist: d };
