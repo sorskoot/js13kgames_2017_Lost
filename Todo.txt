@@ -15,6 +15,7 @@ Should Have:
 - camera follow / rubber banding
 
 Would Like:
+- A* on mobs
 - begin with the camera pointed higher so you don't start moving
 - fading van sprites
 

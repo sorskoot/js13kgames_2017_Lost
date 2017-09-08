@@ -4,3 +4,5 @@ require('./myShader');
 require('./billboardShader');
 require('./mapcomp');
 require('./gamemanager');
+require('./mob');
+require('./player')

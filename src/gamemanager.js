@@ -7,6 +7,7 @@ AFRAME.registerComponent('gamemanager', {
     init: function () {
         this.player = document.getElementById('player');
         this.camera = document.getElementById('camera');
+        this.map = document.getElementById('mapgeo').components.map;
         this.camera.rot = 0;
         window.GM = this;
     },
@@ -17,6 +18,8 @@ AFRAME.registerComponent('gamemanager', {
                 break;
             case 1:
                 console.log('enemy');
+                let mobs = document.querySelectorAll('[mob]');
+                mobs.forEach(d => d.components.mob.move());
                 this.data.state = 0;
                 break;
         }
@@ -62,7 +65,7 @@ AFRAME.registerComponent('gamemanager', {
                 s.player.setAttribute('position', `${coords.x} .25 ${coords.z}`);
                 // rotation is relative;
                 //  if (GM.camera.rot < targetRot) {
-              
+
                 //GM.camera.components.rotation.data.y = coords.dir;
                 // }
             })
@@ -74,11 +77,7 @@ AFRAME.registerComponent('gamemanager', {
     }
 });
 
-AFRAME.registerComponent('player',{
 
-});
 
-AFRAME.registerComponent('mob',{
-    
-});
+
 
