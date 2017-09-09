@@ -13,10 +13,10 @@ AFRAME.registerComponent('mob', {
         do {
             tx = rnd(3) - 1;
             ty = rnd(3) - 1;
-            c = GM.map.getPix(s.x + tx, s.y + ty);
+            c = GM.map.getPix(s.data.x + tx, s.data.y + ty);
         } while (c.data.every(d => d == 0))
-        s.x += tx;
-        s.y += ty;
+        s.data.x += tx;
+        s.data.y += ty;
         let coords = { x: s.pos.data.x, z: s.pos.data.z };
         var tween = new TWEEN.Tween(coords)
             .to({ x: s.pos.data.x + tx, z: s.pos.data.z + ty }, 1000)

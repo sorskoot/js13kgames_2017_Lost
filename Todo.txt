@@ -1,8 +1,10 @@
 Must have:
 - Object placement  
     - game goal
+- Grabbing items    
 - Battles
 - Reaching the Goal
+- Don't 'move' when clicking on current tile
 
 Should Have:
 - Some AI
