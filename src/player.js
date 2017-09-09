@@ -8,6 +8,11 @@ AFRAME.registerComponent('player', {
         coords.r = GM.camera.rot;
         if (a.distanceTo(b) > 1.5 || a.distanceTo(b) < .2)
             return;
+        c = GM.map.getPix(data.x + size / 2, data.y + size / 2);
+        
+        if(c.data[1]>0){ // item in next position
+            var item = document.querySelector(`#b${data.x + size / 2}-${data.y + size / 2}`).components.item.get();
+        }
 
         var tween = new TWEEN.Tween(coords) // Create a new tween that modifies 'coords'.
             .to({ x: data.x, z: data.y }, 1000) // Move to (300, 200) in 1 second.

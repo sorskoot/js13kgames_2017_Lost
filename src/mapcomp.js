@@ -1,6 +1,6 @@
 const mapGen = require("./mapgen");
 
-const size = 128;
+window.size = 128;
 const depth = 7;
 
 AFRAME.registerComponent('map', {
