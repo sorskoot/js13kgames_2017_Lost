@@ -26,7 +26,7 @@ AFRAME.registerComponent('map', {
 
                     plane.addEventListener('click', function () {
                         //plane.setAttribute("mytexture", "src: #my-texture;index:4");
-                        GM.movePlayer({ x, y });
+                        GM.player.components.player.move({ x, y });
                         //this.sceneEl.components.gamemanager.movePlayer({ x, y });
                     });
 
@@ -82,7 +82,7 @@ AFRAME.registerComponent('map', {
             ty = p.y - size / 2;
             var d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(tx, ty));
 
-            b.setAttribute("billboard-texture", { index: item.s, lookup: item.i });
+            b.setAttribute("billboard-texture",{index:3});// { index: item.s, lookup: item.i });
             b.setAttribute('position', `${tx} .25 ${ty}`);
             b.setAttribute('mixin', 'spr');
             b.setAttribute('item', { x: p.x, y: p.y, props: item });
