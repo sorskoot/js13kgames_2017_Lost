@@ -85,6 +85,7 @@ AFRAME.registerComponent('map', {
             b.setAttribute("billboard-texture", { index: item.s, lookup: item.i });
             b.setAttribute('position', `${tx} .25 ${ty}`);
             b.setAttribute('mixin', 'spr');
+            b.setAttribute('item', { x: p.x, y: p.y, props: item });
             b.id = `b${p.x}-${p.y}`;
             b.data = item;
             items.appendChild(b);
