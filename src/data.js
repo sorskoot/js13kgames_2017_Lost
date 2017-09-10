@@ -30,14 +30,14 @@ window.D = {
     items: [
         {
             t: 1,
-            n: "heart", //name
+            n: "a heart", //name
             s: 13, //sprite
             i: -1, // palette index
             m: 0, // minimal distance from start
             c: 70, // change of the item spawning
         }, {
             t: 2, // subtype : sword",
-            n: "iron Sword", //name
+            n: "an iron sword", //name
             d: 5, // damage
             s: 5, //sprite
             i: 1, // palette index
@@ -46,7 +46,7 @@ window.D = {
             
         }, {
             t: 2, // subtype : sword",
-            n: "Golden Sword", //name
+            n: "a golden sword", //name
             d: 5, // damage
             s: 5, //sprite
             i: 23, // palette index
@@ -54,7 +54,7 @@ window.D = {
             c: 10, // change of the item spawning
         }, {
             t: 2, // subtype : sword",
-            n: "diamond Sword", //name
+            n: "a diamond sword", //name
             d: 5, // damage
             s: 5, //sprite
             i: 24, // palette index
@@ -62,7 +62,7 @@ window.D = {
             c: 2, // change of the item spawning
         }, {
             t: 3, // subtype : shield",
-            n: "iron shield", //name
+            n: "an iron shield", //name
             b: 2, // block value
             s: 4, //sprite
             i: 0, // palette index
@@ -70,7 +70,7 @@ window.D = {
             c: 20, // change of the item spawning
         }, {
             t: 3, // subtype : shield",
-            n: "golden shield", //name
+            n: "a golden shield", //name
             b: 4, // block value
             s: 4, //sprite
             i: 23 , // palette index
@@ -78,7 +78,7 @@ window.D = {
             c: 10, // change of the item spawning
         }, {
             t: 3, // subtype : shield",
-            n: "diamond shield", //name
+            n: "a diamond shield", //name
             b: 7, // block value
             s: 4, //sprite
             i: 24, // palette index

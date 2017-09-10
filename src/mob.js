@@ -19,8 +19,9 @@ AFRAME.registerComponent('mob', {
         s.data.y += ty;
         let coords = { x: s.pos.data.x, z: s.pos.data.z };
         var tween = new TWEEN.Tween(coords)
-            .to({ x: s.pos.data.x + tx, z: s.pos.data.z + ty }, 1000)
-            .easing(TWEEN.Easing.Quadratic.Out)
+            .to({ x: s.pos.data.x + tx, z: s.pos.data.z + ty }, 400+rnd(400))
+            .delay(rnd(250))
+            .easing(TWEEN.Easing.Quadratic.InOut)
             .onUpdate(function () {
                 s.el.setAttribute('position', `${coords.x} .25 ${coords.z}`);
             })

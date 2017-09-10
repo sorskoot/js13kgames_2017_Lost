@@ -1,4 +1,7 @@
 AFRAME.registerComponent('player', {
+    schema: {
+        health: { value: 'int', default: 10 }
+    },
     move: function (data) {
         var s = this;
         if (GM.data.state != 0) return;
@@ -9,17 +12,30 @@ AFRAME.registerComponent('player', {
         if (a.distanceTo(b) > 1.5 || a.distanceTo(b) < .2)
             return;
         c = GM.map.getPix(data.x + size / 2, data.y + size / 2);
-        
-        if(c.data[1]>0){ // item in next position
-            var item = document.querySelector(`#b${data.x + size / 2}-${data.y + size / 2}`).components.item.get();
+
+        if (c.data[1] > 0) { // item in next position
+            document.querySelector(`#b${data.x + size / 2}-${data.y + size / 2}`).components.item.get()
+                .then(p => {
+                    let msg = `Found ${p.n}`;
+                    switch (p.t) {
+                        case 1: // heart
+                            s.data.health = Math.max(s.data.health++, 10);
+                            msg+=`\nHealth = ${s.data.health}/10`;
+                            break;
+                        case 2: // sword
+                            break;
+                        case 3: // shield
+                            break;
+                    }
+                    GM.message.write(msg);
+                });
         }
 
         var tween = new TWEEN.Tween(coords) // Create a new tween that modifies 'coords'.
             .to({ x: data.x, z: data.y }, 1000) // Move to (300, 200) in 1 second.
-            .easing(TWEEN.Easing.Quadratic.Out) // Use an easing function to make the animation smooth.
+            .easing(TWEEN.Easing.Quadratic.InOut) // Use an easing function to make the animation smooth.
             .onUpdate(function () { // Called after tween.js updates 'coords'.
                 s.el.setAttribute('position', `${coords.x} .25 ${coords.z}`);
-
             })
             .onComplete(function () {
                 GM.data.state = 1;

@@ -1,7 +1,6 @@
 Must have:
 - Object placement  
     - game goal
-- Grabbing items    
 - Battles
 - Reaching the Goal
 - Don't 'move' when clicking on current tile
@@ -13,12 +12,13 @@ Should Have:
 - Weapon/shield indication
 - camera follow / rubber banding
 
-Would Like:
+
+Could Have:
 - A* on mobs
 - begin with the camera pointed higher so you don't start moving
 - fading van sprites
 
-Could Have.
+Would Like:
 - better Biomes
 - sound fx
 - graphic fx
@@ -32,3 +32,5 @@ done:
     - enemies
     - weapons
 - Enemy Turns
+- Grabbing items  
+- no 2 items on same spot

@@ -8,6 +8,7 @@ AFRAME.registerComponent('gamemanager', {
         this.player = document.getElementById('player');
         this.camera = document.getElementById('camera');
         this.map = document.getElementById('mapgeo').components.map;
+        this.message = document.querySelector('[message]').components.message;
         this.camera.rot = 0;
         window.GM = this;
     },
@@ -25,8 +26,8 @@ AFRAME.registerComponent('gamemanager', {
                 break;
         }
     }
-   
-    
+
+
 });
 
 

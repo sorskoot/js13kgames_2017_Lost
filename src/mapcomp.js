@@ -42,7 +42,10 @@ AFRAME.registerComponent('map', {
         this.el.appendChild(this.addMobs());
     },
     getPix: function (x, y) {
-        return this.mapContext.getImageData(x, y, 1, 1)
+        return this.mapContext.getImageData(x, y, 1, 1);
+    },
+    putPix: function (c, x, y) {
+        return this.mapContext.putImageData(c, x, y);
     },
     randomPlace: function (minDistance = 0) {
         let x, y, c;
@@ -67,6 +70,7 @@ AFRAME.registerComponent('map', {
             let b = document.createElement("a-entity"), tx, ty;
             let p = this.randomPlace();
             let item = this.getWeighted(D.items);
+            item.map = p;
             // 0x4X are bags
             //     0x41 = heart                         
             //     0x42 = sword iron
@@ -75,6 +79,7 @@ AFRAME.registerComponent('map', {
             //     0x45 = shield iron                           
             //     0x46 = shield gold
             //     0x47 = shield diamond                        
+            if (p.c.data[1] != 0) continue;
             p.c.data[1] = 0x41;
             this.mapContext.putImageData(p.c, p.x, p.y);
 
@@ -82,7 +87,7 @@ AFRAME.registerComponent('map', {
             ty = p.y - size / 2;
             var d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(tx, ty));
 
-            b.setAttribute("billboard-texture",{index:3});// { index: item.s, lookup: item.i });
+            b.setAttribute("billboard-texture", { index: 3 });// { index: item.s, lookup: item.i });
             b.setAttribute('position', `${tx} .25 ${ty}`);
             b.setAttribute('mixin', 'spr');
             b.setAttribute('item', { x: p.x, y: p.y, props: item });
@@ -96,8 +101,6 @@ AFRAME.registerComponent('map', {
         let items = document.createElement("a-entity");
         for (let i = 0; i < 150; i++) {
             let b = document.createElement("a-entity"), tx, ty;
-
-            //  let ind = rnd(3);
             let mob = this.getWeighted(D.mobs), p, d;
             do {
                 p = this.randomPlace();
@@ -105,10 +108,6 @@ AFRAME.registerComponent('map', {
                 ty = p.y - size / 2;
                 d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(tx, ty));
             } while (mob.m >= d);
-            // 0x4X are Enemies
-            //     0x41 = Green
-            //     0x42 = Purple
-            //       p.c.data[2] = 0x41 + ind;
             this.mapContext.putImageData(p.c, p.x, p.y);
 
             b.setAttribute("billboard-texture", { index: 2, lookup: mob.i });

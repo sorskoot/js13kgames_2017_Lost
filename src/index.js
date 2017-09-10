@@ -7,3 +7,4 @@ require('./gamemanager');
 require('./mob');
 require('./player');
 require('./item');
+require('./message');
