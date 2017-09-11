@@ -1,9 +1,11 @@
 Must have:
-- Battles
 - Reaching the Goal
+- Dying
 - Don't 'move' when clicking on current tile
 
 Should Have:
+- Damage animation
+- Mob death animation
 - camera follow / rubber banding
 - Health indication
 - Weapon/shield indication
@@ -11,10 +13,10 @@ Should Have:
 - prevent two mobs in the same place
 
 Could Have:
+- In game way to restart after winning or dying
 - Biomes
 - A* on mobs
 - begin with the camera pointed higher so you don't start moving
-
 
 Would Like:
 - walls/structures
@@ -22,6 +24,8 @@ Would Like:
 - sound fx
 - graphic fx
 - multiple levels
+- More mobs
+- More items
 
 done:
 - Get Shaders to work
@@ -37,3 +41,4 @@ done:
 - debug missing sprite on mobile
 - lookupindex of weapons seems to be wrong (gold/diamond) ??
 - fading van sprites
+- Battles
