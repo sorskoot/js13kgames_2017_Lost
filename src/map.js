@@ -102,6 +102,7 @@ AFRAME.registerComponent('map', {
                 ty = p.y - size / 2;
                 d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(tx, ty));
             } while (mob.m >= d);
+            p.c.data[2] = 0x88;
             this.putPix(p.c, p.x, p.y);
 
             b.setAttribute("billboard-texture", { index: 2, lookup: mob.i });
