@@ -1,6 +1,5 @@
 Must have:
 - Reaching the Goal
-- Don't 'move' when clicking on current tile
 - implement shield
 
 Should Have:
@@ -10,6 +9,7 @@ Should Have:
 - Some AI
 - prevent two mobs in the same place
 - durability on items
+- Don't 'move' when clicking on current tile
 
 Could Have:
 - Spawning of mobs during game
