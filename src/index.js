@@ -8,3 +8,4 @@ require('./mob');
 require('./player');
 require('./item');
 require('./message');
+require('./autodestroy');

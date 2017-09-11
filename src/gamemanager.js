@@ -22,7 +22,9 @@ AFRAME.registerComponent('gamemanager', {
                 console.log('enemy');
                 let mobs = document.querySelectorAll('[mob]');
                 mobs.forEach(d => d.components.mob.move());
-                this.data.state = 0;
+                setTimeout(() => {
+                    this.data.state = 0;
+                }, 250);
                 break;
         }
     }

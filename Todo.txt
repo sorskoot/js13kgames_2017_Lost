@@ -1,18 +1,19 @@
 Must have:
 - Reaching the Goal
-- Dying
 - Don't 'move' when clicking on current tile
+- implement shield
 
 Should Have:
-- Damage animation
-- Mob death animation
 - camera follow / rubber banding
 - Health indication
 - Weapon/shield indication
 - Some AI
 - prevent two mobs in the same place
+- durability on items
 
 Could Have:
+- Spawning of mobs during game
+- Spawning of bags during game
 - In game way to restart after winning or dying
 - Biomes
 - A* on mobs
@@ -42,3 +43,6 @@ done:
 - lookupindex of weapons seems to be wrong (gold/diamond) ??
 - fading van sprites
 - Battles
+- Damage animation
+- Mob death animation
+- Dying

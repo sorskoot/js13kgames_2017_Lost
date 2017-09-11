@@ -1,6 +1,6 @@
 AFRAME.registerComponent('player', {
     schema: {
-        health: { value: 'int', default: 10 }
+        health: { value: 'int', default: 15 }
     },
     init: function () {
         this.foundPieces = 0;
@@ -21,20 +21,20 @@ AFRAME.registerComponent('player', {
         if (c.data[2] > 0) { // mob in next position
             let mob = document.querySelector(`#e${data.x + size / 2}-${data.y + size / 2}`).components.mob;
             let sprcoord = { x: 0, z: 0 };
-
             var tween = new TWEEN.Tween(sprcoord) // Create a new tween that modifies 'coords'.
-                .to({ x: a.x - b.x, z: a.y - b.y }, 250) // Move to (300, 200) in 1 second.
+                .to({ x: a.x - b.x, z: a.y - b.y }, 500) // Move to (300, 200) in 1 second.
                 .yoyo(true)
                 .repeat(1)
                 .easing(TWEEN.Easing.Quadratic.InOut) // Use an easing function to make the animation smooth.
-                .onUpdate(()=> { // Called after tween.js updates 'coords'.
+                .onUpdate(() => { // Called after tween.js updates 'coords'.
                     this.sprite.setAttribute('position', `${sprcoord.x} 0 ${sprcoord.z}`);
                 })
                 .onComplete(() => {
-                    //show splat
-                    GM.data.state = 1;
                     mob.hit(this.attack + rnd(2));
-                    GM.update();
+                    setTimeout(() => {
+                        GM.data.state = 1;
+                        GM.update();
+                    }, 1000);
                 })
                 .start(); // Start the tween immediately.            
         } else {
@@ -44,8 +44,8 @@ AFRAME.registerComponent('player', {
                         let msg = `Found ${p.n}`;
                         switch (p.t) {
                             case 1: // heart
-                                s.data.health = Math.min(s.data.health++, 10);
-                                msg += `\nHealth = ${s.data.health}/10`;
+                                s.data.health = Math.min(s.data.health++, 15);
+                                msg += `\nHealth = ${s.data.health}/15`;
                                 break;
                             case 2: // sword
                                 if (p.d > this.attack) this.attack = p.d;
@@ -68,7 +68,7 @@ AFRAME.registerComponent('player', {
                 .onUpdate(function () { // Called after tween.js updates 'coords'.
                     s.el.setAttribute('position', `${coords.x} .25 ${coords.z}`);
                 })
-                .onComplete(function () {
+                .onComplete(() => {
                     GM.data.state = 1;
                     GM.update();
                 })
@@ -76,7 +76,20 @@ AFRAME.registerComponent('player', {
         }
     },
     hit: function (amount) {
+        let ent = document.createElement('a-entity');
+        ent.setAttribute('billboard-texture', { index: 14, lookup: 5 });
+        ent.setAttribute('mixin', 'spr');
+        ent.setAttribute('auto-destroy', '');
+        this.el.appendChild(ent);
+
         this.data.health -= amount;
-        GM.message.write(`Ouch\nHealth = ${this.data.health}/10`);
+        if (this.data.health <= 0) {
+            this.sprite.setAttribute('billboard-texture', { index: 15});
+            GM.data.state = 3;            
+            GM.message.write(`Game Over`);        
+        }
+        else {
+            GM.message.write(`Ouch\nHealth = ${this.data.health}/15`);
+        }
     }
 });
