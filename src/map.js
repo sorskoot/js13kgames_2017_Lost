@@ -37,7 +37,7 @@ AFRAME.registerComponent('map', {
         this.el.appendChild(world);
         this.el.appendChild(this.addObjs());
         this.el.appendChild(this.addItems());
-        this.el.appendChild(this.addMobs());        
+        this.el.appendChild(this.addMobs());
     },
     getPix: function (x, y) {
         return this.mapContext.getImageData(x, y, 1, 1);
@@ -69,7 +69,7 @@ AFRAME.registerComponent('map', {
             let p = this.randomPlace();
             let item = this.getWeighted(D.items);
             item.map = p;
-                      
+
             if (p.c.data[1] != 0) continue;
             p.c.data[1] = 0x41;
             this.putPix(p.c, p.x, p.y);
@@ -105,7 +105,11 @@ AFRAME.registerComponent('map', {
             b.setAttribute("billboard-texture", { index: 2, lookup: mob.i });
             b.setAttribute('position', `${tx} .25 ${ty}`);
             b.setAttribute('mixin', 'spr');
-            b.setAttribute('mob', { x: p.x, y: p.y, health: rnd(mob.h[1]) + mob.h[0] });
+            b.setAttribute('mob', {
+                x: p.x, y: p.y,
+                health: rnd(mob.h[1]) + mob.h[0],
+                damage: rnd(mob.d[1]) + mob.d[0]
+            });
             b.id = `e${p.x}-${p.y}`;
             items.appendChild(b);
         }

@@ -4,19 +4,22 @@ window.D = {
         s: 2,  // sprite: 2    
         h: 10, // start health
     }, mobs: [{
-        h: [2, 3], // health: between 2 and 5
+        h: [3, 2], // health: between 2 and 5
+        d: [1, 1], //damage between 1 and 2
         i: 6,  // color index 8
         m: 0, // minimal distance from start
         c: 70 // change=70%
     },
     {
         h: [4, 4], // health: between 4 and 8
+        d: [3, 2], //damage between 2 and 5
         i: 7, // color index 8
         m: 10, // minimal distance from start
         c: 20 //change 30%        
     },
     {
         h: [6, 6], // health: between 6 and 12
+        d: [5, 4], //damage between 4 and 9
         i: 9,  // color index 8
         m: 30, // minimal distance from start
         c: 10 // change 10%
@@ -38,7 +41,7 @@ window.D = {
         }, {
             t: 2, // subtype : sword",
             n: "an iron sword", //name
-            d: 5, // damage
+            d: 3, // damage
             s: 5, //sprite
             i: 1, // palette index
             m: 0, // minimal distance from start
@@ -47,7 +50,7 @@ window.D = {
         }, {
             t: 2, // subtype : sword",
             n: "a golden sword", //name
-            d: 5, // damage
+            d: 6, // damage
             s: 5, //sprite
             i: 23, // palette index
             m: 0, // minimal distance from start
@@ -55,7 +58,7 @@ window.D = {
         }, {
             t: 2, // subtype : sword",
             n: "a diamond sword", //name
-            d: 5, // damage
+            d: 10, // damage
             s: 5, //sprite
             i: 24, // palette index
             m: 0, // minimal distance from start

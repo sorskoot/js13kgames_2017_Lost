@@ -1,6 +1,4 @@
 Must have:
-- Object placement  
-    - game goal
 - Battles
 - Reaching the Goal
 - Don't 'move' when clicking on current tile
@@ -32,6 +30,7 @@ done:
     - items 
     - enemies
     - weapons
+    - game goal    
 - Enemy Turns
 - Grabbing items  
 - no 2 items on same spot
