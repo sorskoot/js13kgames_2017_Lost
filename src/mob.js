@@ -14,7 +14,8 @@ AFRAME.registerComponent('mob', {
             tx = rnd(3) - 1;
             ty = rnd(3) - 1;
             c = GM.map.getPix(s.data.x + tx, s.data.y + ty);
-        } while (c.data[0] == 0 && c.data[1] != 0 && c.data[2] != 0)
+        } while (c.data[0] == 0)
+        
         let old = GM.map.getPix(s.data.x, s.data.y);
         old.data[2] = 0;
         GM.map.putPix(old, s.data.x, s.data.y);
