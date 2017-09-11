@@ -36,6 +36,7 @@ AFRAME.registerComponent('billboard-texture', {
    */
   update: function () {
     this.material.uniforms.index.value = this.data.index;
+    this.material.uniforms.lookupIndex.value = this.data.lookup;
   },
   /**
    * Apply the material to the current entity.

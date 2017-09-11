@@ -4,6 +4,7 @@ Must have:
 - Battles
 - Reaching the Goal
 - Don't 'move' when clicking on current tile
+- debug missing sprite on mobile
 
 Should Have:
 - Some AI
@@ -11,7 +12,7 @@ Should Have:
 - Health indication
 - Weapon/shield indication
 - camera follow / rubber banding
-
+- prevent two mobs in the same place
 
 Could Have:
 - A* on mobs

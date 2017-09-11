@@ -2,6 +2,9 @@ AFRAME.registerComponent('player', {
     schema: {
         health: { value: 'int', default: 10 }
     },
+    init: function () {
+        this.foundPieces = 0;
+    },
     move: function (data) {
         var s = this;
         if (GM.data.state != 0) return;
@@ -9,7 +12,7 @@ AFRAME.registerComponent('player', {
         var a = new THREE.Vector3(data.x, data.y, 0);                      // 0,0
         var b = new THREE.Vector3(coords.x, coords.z, 0);                  // 1,0
         coords.r = GM.camera.rot;
-        if (a.distanceTo(b) > 1.5 || a.distanceTo(b) < .2)
+        if (a.distanceTo(b) > 1.9 || a.distanceTo(b) < .2)
             return;
         c = GM.map.getPix(data.x + size / 2, data.y + size / 2);
 
@@ -20,11 +23,15 @@ AFRAME.registerComponent('player', {
                     switch (p.t) {
                         case 1: // heart
                             s.data.health = Math.max(s.data.health++, 10);
-                            msg+=`\nHealth = ${s.data.health}/10`;
+                            msg += `\nHealth = ${s.data.health}/10`;
                             break;
                         case 2: // sword
                             break;
                         case 3: // shield
+                            break;
+                        case 8: // plane piece
+                            this.foundPieces++;
+                            msg += `\nOnly ${5 - this.foundPieces} pieces left`;
                             break;
                     }
                     GM.message.write(msg);

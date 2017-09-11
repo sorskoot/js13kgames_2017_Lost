@@ -38,8 +38,9 @@ AFRAME.registerComponent('map', {
         }
 
         this.el.appendChild(world);
+        this.el.appendChild(this.addObjs());
         this.el.appendChild(this.addItems());
-        this.el.appendChild(this.addMobs());
+        this.el.appendChild(this.addMobs());        
     },
     getPix: function (x, y) {
         return this.mapContext.getImageData(x, y, 1, 1);
@@ -71,17 +72,10 @@ AFRAME.registerComponent('map', {
             let p = this.randomPlace();
             let item = this.getWeighted(D.items);
             item.map = p;
-            // 0x4X are bags
-            //     0x41 = heart                         
-            //     0x42 = sword iron
-            //     0x43 = sword gold
-            //     0x44 = sword diamond                         
-            //     0x45 = shield iron                           
-            //     0x46 = shield gold
-            //     0x47 = shield diamond                        
+                      
             if (p.c.data[1] != 0) continue;
             p.c.data[1] = 0x41;
-            this.mapContext.putImageData(p.c, p.x, p.y);
+            this.putPix(p.c, p.x, p.y);
 
             tx = p.x - size / 2;
             ty = p.y - size / 2;
@@ -108,7 +102,7 @@ AFRAME.registerComponent('map', {
                 ty = p.y - size / 2;
                 d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(tx, ty));
             } while (mob.m >= d);
-            this.mapContext.putImageData(p.c, p.x, p.y);
+            this.putPix(p.c, p.x, p.y);
 
             b.setAttribute("billboard-texture", { index: 2, lookup: mob.i });
             b.setAttribute('position', `${tx} .25 ${ty}`);
@@ -118,5 +112,28 @@ AFRAME.registerComponent('map', {
             items.appendChild(b);
         }
         return items;
+    },
+    addObjs: function () {
+        let objs = document.createElement("a-entity");
+        for (let i = 0; i < 5; i++) {
+            let b = document.createElement("a-entity"), tx, ty, p, d;
+            do {
+                p = this.randomPlace();
+                tx = p.x - size / 2;
+                ty = p.y - size / 2;
+                d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(tx, ty));
+            } while (25 >= d);
+
+            p.c.data[1] = 0xEE;
+            this.putPix(p.c, p.x, p.y);
+
+            b.setAttribute("billboard-texture", { index: D.objs[i].s });
+            b.setAttribute('position', `${tx} .25 ${ty}`);
+            b.setAttribute('mixin', 'spr');
+            b.setAttribute('item', { x: p.x, y: p.y, props: D.objs[i] });
+            b.id = `b${p.x}-${p.y}`;
+            objs.appendChild(b);
+        }
+        return objs;
     }
 });

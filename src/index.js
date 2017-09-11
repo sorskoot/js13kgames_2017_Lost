@@ -2,7 +2,7 @@ require('./global');
 require('./data');
 require('./myShader');
 require('./billboardShader');
-require('./mapcomp');
+require('./map');
 require('./gamemanager');
 require('./mob');
 require('./player');

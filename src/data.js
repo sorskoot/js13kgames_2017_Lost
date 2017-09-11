@@ -7,7 +7,7 @@ window.D = {
         h: [2, 3], // health: between 2 and 5
         i: 6,  // color index 8
         m: 0, // minimal distance from start
-        c:70 // change=70%
+        c: 70 // change=70%
     },
     {
         h: [4, 4], // health: between 4 and 8
@@ -43,7 +43,7 @@ window.D = {
             i: 1, // palette index
             m: 0, // minimal distance from start
             c: 20, // change of the item spawning
-            
+
         }, {
             t: 2, // subtype : sword",
             n: "a golden sword", //name
@@ -73,7 +73,7 @@ window.D = {
             n: "a golden shield", //name
             b: 4, // block value
             s: 4, //sprite
-            i: 23 , // palette index
+            i: 23, // palette index
             m: 0, // minimal distance from start
             c: 10, // change of the item spawning
         }, {
@@ -85,7 +85,31 @@ window.D = {
             m: 0, // minimal distance from start
             c: 5, // change of the item spawning
         }],
-    objectives: [{
-
+    objs: [{ //objectives
+        t: 8, // item type = 8
+        p: 1, // piece =1
+        n: "your plane's cabin",
+        s: 6
+    },
+    {
+        t: 8, // item type = 8
+        p: 2,
+        n: "your plane's left wing",
+        s: 7
+    },{
+        t: 8, // item type = 8
+        p: 3,
+        n: "your plane's body",
+        s: 8
+    },{
+        t: 8, // item type = 8
+        p: 4,
+        n: "your plane's right wing",
+        s: 9
+    },{
+        t: 8, // item type = 8
+        p: 5,
+        n: "your plane's thruster",
+        s: 10
     }]
 }
