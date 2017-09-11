@@ -14,20 +14,17 @@ AFRAME.registerComponent('map', {
                 if (worldData.data[wdp] != 0) {
                     let plane = document.createElement("a-entity")
                     plane.classList.add("floor");
-                    if (worldData.data[wdp] == 102) plane.setAttribute("mytexture", "index:11;lookup:11");
+                    if (worldData.data[wdp] == 102) plane.setAttribute("mytexture", "index:11;lookup:8");
                     else if (worldData.data[wdp] == 170) plane.setAttribute("mytexture", "index:12;lookup:10");
                     else if (worldData.data[wdp] == 238) plane.setAttribute("mytexture", "index:12;lookup:9");
-                    //if (worldData.data[wdp]==102) plane.setAttribute("mytexture", "index:11;lookup:8");
                     else {
                         plane.setAttribute("mytexture", "index:0;lookup:" + ~~((i * 5) / (j * 2) * 3) % 5);
-                    }// + rnd(6));
+                    }
                     let x = i - (size / 2);
                     let y = j - (size / 2);
 
                     plane.addEventListener('click', function () {
-                        //plane.setAttribute("mytexture", "src: #my-texture;index:4");
                         GM.player.components.player.move({ x, y });
-                        //this.sceneEl.components.gamemanager.movePlayer({ x, y });
                     });
 
                     plane.setAttribute('position', `${x} 0 ${y}`);

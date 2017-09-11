@@ -47,13 +47,15 @@ void main()
   vec4 color;
   if( lookupIndex >= 0.0 && texturedColor.a > 0.0 && texturedColor.x == texturedColor.y && texturedColor.x == texturedColor.z){
     float ind = texturedColor.x; 
-    float y = 1.0-(lookupIndex*(1.0/24.0));
+    float y = 1.0-(lookupIndex*(1.0/25.0));
 		texturedColor = texture2D(Lookup,vec2(ind, y));  
 	}//else{
-  
+
+ if ( texturedColor.a < alphatest ) discard;
+
  color = mix(texturedColor, vec4(fogColor,0.0), fogFactor);   
   //}
-  if ( color.a < alphatest ) discard;
+  
 
   gl_FragColor =  color;
 }
@@ -105,7 +107,7 @@ void main()
   }
 </script>
 </head>
-<body style="background-color:#000">    
+<body style="background-color:#000;">    
   <a-scene  id="scene"
             gamemanager
             inspector="url: https://aframe.io/releases/0.3.0/aframe-inspector.min.js" class="fullscreen"            
@@ -123,8 +125,8 @@ void main()
    
     <a-entity id="player" player position="0 .25 0" geometry="primitive: plane; height: .5; width: .5"  
             billboard-texture="index:1;lookup:-1">        
-      <a-entity id="camera" camera="active:true;fov:90;zoom:.8;near:0.01;far:15;userHeight:1.2" 
-            look-controls="standing:true" position="0 0 2" 
+      <a-entity id="camera" camera="active:true;fov:90;zoom:.8;near:0.01;far:15;userHeight:.8" 
+            look-controls="standing:true" position="0 0 2.0" 
             rotation="-25 0.8 0" 
             scale="1 1 1" 
             visible="true">

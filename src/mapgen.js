@@ -165,9 +165,6 @@ var generator = {
             do {
                 piece = pieces[rnd(pieces.length)];
                 for (var q = 0; q < piece.exits.length; q++) {
-                    //calcalate new position so that the '2s' go on top of eachother, but tiles not overlap
-                    //if they overlap try a different '2'
-                    //if there isn't a 2, try another piece
                     targetX = exit.x - piece.exits[q].x;
                     targetY = exit.y - piece.exits[q].y;
                     var imgData = mapContext.getImageData(targetX, targetY, piece.size.w, piece.size.h);
@@ -187,9 +184,9 @@ var generator = {
                 q = 0;
                 // return [];
             }
-            mapContext.fillStyle = "#400";
-            if (!first) mapContext.fillRect(targetX + piece.exits[q].x || 0, targetY + piece.exits[q].y || 0, 1, 1);
             mapContext.fillStyle = !first ? "#400" : "#600";
+            if (!first) mapContext.fillRect(targetX + piece.exits[q].x || 0, targetY + piece.exits[q].y || 0, 1, 1);
+         
             if (special === 1) {
                 mapContext.fillStyle = "#E00";
             }
@@ -200,7 +197,6 @@ var generator = {
             piece.forEach((i, py) => {
                 i.forEach((j, px) => {
                     if (j === 1) {
-
                         mapContext.fillRect(targetX + px, targetY + py, 1, 1);
                     }
                     if (j === 2) {

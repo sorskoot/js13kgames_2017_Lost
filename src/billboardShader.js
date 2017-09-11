@@ -19,7 +19,7 @@ AFRAME.registerComponent('billboard-texture', {
         repeat: { value: { x: 1.0, y: 1.0 } },
         Lookup: { value: window.pal },    
         lookupIndex:{value:data.lookup},
-        fogStart:{value:10},
+        fogStart:{value:5},
         fogEnd:{value:15},
         alphatest:{value:0.95},
         fogColor:{value: new THREE.Color(0,0,0)}

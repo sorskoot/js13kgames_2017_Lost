@@ -4,22 +4,22 @@ Must have:
 - Battles
 - Reaching the Goal
 - Don't 'move' when clicking on current tile
-- debug missing sprite on mobile
 
 Should Have:
-- Some AI
-- Biomes
+- camera follow / rubber banding
 - Health indication
 - Weapon/shield indication
-- camera follow / rubber banding
+- Some AI
 - prevent two mobs in the same place
 
 Could Have:
+- Biomes
 - A* on mobs
 - begin with the camera pointed higher so you don't start moving
-- fading van sprites
+
 
 Would Like:
+- walls/structures
 - better Biomes
 - sound fx
 - graphic fx
@@ -35,3 +35,6 @@ done:
 - Enemy Turns
 - Grabbing items  
 - no 2 items on same spot
+- debug missing sprite on mobile
+- lookupindex of weapons seems to be wrong (gold/diamond) ??
+- fading van sprites
