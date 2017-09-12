@@ -34,6 +34,7 @@ AFRAME.registerComponent('player', {
                 .onComplete(() => {
                     mob.hit(this.attack + rnd(2));
                     setTimeout(() => {
+                        if(GM.data.state >2)return;
                         GM.data.state = 1;
                         GM.update();
                     }, 1000);
@@ -57,7 +58,7 @@ AFRAME.registerComponent('player', {
                                 break;
                             case 8: // plane piece
                                 this.foundPieces++;
-                                if (this.foundPieces < 5) {
+                                if (this.foundPieces < 0) {
                                     msg += `\nOnly ${5 - this.foundPieces} pieces left`;
                                 } else {
                                     GM.data.state = 3;
@@ -77,6 +78,7 @@ AFRAME.registerComponent('player', {
                     s.el.setAttribute('position', `${coords.x} .25 ${coords.z}`);
                 })
                 .onComplete(() => {
+                    if(GM.data.state > 2)return;
                     GM.data.state = 1;
                     GM.update();
                 })

@@ -14,6 +14,7 @@ AFRAME.registerComponent('gamemanager', {
         window.GM = this;
     },
     update: function (d) {
+        if (this.data.state > 1) return;
         switch (this.data.state) {
             case 0:
                 this.player.components.player.move(d);
