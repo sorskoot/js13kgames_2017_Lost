@@ -9,20 +9,21 @@ AFRAME.registerComponent('gamemanager', {
         this.camera = document.getElementById('camera');
         this.map = document.getElementById('mapgeo').components.map;
         this.message = document.querySelector('[canvas-text]').components['canvas-text'];
+        this.cursor = document.querySelector('[cursor]');
         this.camera.rot = 0;
         window.GM = this;
     },
     update: function (d) {
         switch (this.data.state) {
             case 0:
-                console.log('player');
                 this.player.components.player.move(d);
                 break;
             case 1:
-                console.log('enemy');
+                this.cursor.setAttribute('cursor', { fuse: false });
                 let mobs = document.querySelectorAll('[mob]');
                 mobs.forEach(d => d.components.mob.move());
                 setTimeout(() => {
+                    this.cursor.setAttribute('cursor', { fuse: true });
                     this.data.state = 0;
                 }, 500);
                 break;

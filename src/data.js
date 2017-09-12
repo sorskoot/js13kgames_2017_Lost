@@ -66,7 +66,7 @@ window.D = {
         }, {
             t: 3, // subtype : shield",
             n: "an iron shield", //name
-            b: 2, // block value
+            b: 40, // block value 40%
             s: 4, //sprite
             i: 0, // palette index
             m: 0, // minimal distance from start
@@ -74,7 +74,7 @@ window.D = {
         }, {
             t: 3, // subtype : shield",
             n: "a golden shield", //name
-            b: 4, // block value
+            b: 70, // block value 70%
             s: 4, //sprite
             i: 23, // palette index
             m: 6, // minimal distance from start
@@ -82,7 +82,7 @@ window.D = {
         }, {
             t: 3, // subtype : shield",
             n: "a diamond shield", //name
-            b: 7, // block value
+            b: 85, // block value 85%
             s: 4, //sprite
             i: 24, // palette index
             m: 12, // minimal distance from start

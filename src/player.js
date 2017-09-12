@@ -84,7 +84,8 @@ AFRAME.registerComponent('player', {
         }
     },
     hit: function (amount) {
-        let damage = amount - this.defense;
+
+        let damage = amount * (rnd(100) < this.defense ? 0 : 1);
 
         let ent = document.createElement('a-entity');
 
