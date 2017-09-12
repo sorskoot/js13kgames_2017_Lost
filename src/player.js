@@ -102,7 +102,7 @@ AFRAME.registerComponent('player', {
                 GM.message.write(`Game Over`, 1);
             }
             else {
-                GM.message.write(`Ouch\nHealth = ${this.data.health}/25`);
+                GM.message.write(`Ouch!\nHealth = ${this.data.health}/25`);
             }
         }
     }
