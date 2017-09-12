@@ -130,7 +130,7 @@ AFRAME.registerComponent('map', {
                 tx = p.x - size / 2;
                 ty = p.y - size / 2;
                 d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(tx, ty));
-            } while (2 >= d); //25
+            } while (25 >= d); 
 
             p.c.data[1] = 0xEE;
             this.putPix(p.c, p.x, p.y);

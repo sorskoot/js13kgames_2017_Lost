@@ -58,7 +58,7 @@ AFRAME.registerComponent('player', {
                                 break;
                             case 8: // plane piece
                                 this.foundPieces++;
-                                if (this.foundPieces < 0) {
+                                if (this.foundPieces < 5) {
                                     msg += `\nOnly ${5 - this.foundPieces} pieces left`;
                                 } else {
                                     GM.data.state = 3;
