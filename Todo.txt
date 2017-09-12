@@ -1,6 +1,7 @@
 Must have:
-- Reaching the Goal
-- implement shield
+- better balence
+- sometimes a null exception because of moving while monster animation not finished
+
 
 Should Have:
 - camera follow / rubber banding
@@ -47,3 +48,5 @@ done:
 - Damage animation
 - Mob death animation
 - Dying
+- Reaching the Goal
+- implement shield

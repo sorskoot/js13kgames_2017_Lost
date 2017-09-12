@@ -2,7 +2,7 @@
 
 AFRAME.registerComponent('player', {
     schema: {
-        health: { value: 'int', default: 15 }
+        health: { value: 'int', default: 25 }
     },
     init: function () {
         this.foundPieces = 0;
@@ -46,8 +46,8 @@ AFRAME.registerComponent('player', {
                         let msg = `Found ${p.n}`;
                         switch (p.t) {
                             case 1: // heart
-                                s.data.health = Math.min(s.data.health++, 15);
-                                msg += `\nHealth = ${s.data.health}/15`;
+                                s.data.health = Math.min(s.data.health += 5, 25);
+                                msg += `\nHealth = ${s.data.health}/25`;
                                 break;
                             case 2: // sword
                                 if (p.d > this.attack) this.attack = p.d;
@@ -57,12 +57,12 @@ AFRAME.registerComponent('player', {
                                 break;
                             case 8: // plane piece
                                 this.foundPieces++;
-                                if(this.foundPieces<5){
-                                msg += `\nOnly ${5 - this.foundPieces} pieces left`;
-                                }else{
-                                     GM.data.state = 3;            
-                                     GM.message.write(`You found all pieces\nand escaped the planet!`,1);   
-                                     return;
+                                if (this.foundPieces < 5) {
+                                    msg += `\nOnly ${5 - this.foundPieces} pieces left`;
+                                } else {
+                                    GM.data.state = 3;
+                                    GM.message.write(`You found all pieces\nand escaped the planet!`, 1);
+                                    return;
                                 }
                                 break;
                         }
@@ -85,24 +85,25 @@ AFRAME.registerComponent('player', {
     },
     hit: function (amount) {
         let damage = amount - this.defense;
-        
+
         let ent = document.createElement('a-entity');
-        
-        ent.setAttribute('billboard-texture', { index: 14, lookup: damage>0?5:1 });
-        
+
+        ent.setAttribute('billboard-texture', { index: 14, lookup: damage > 0 ? 5 : 1 });
+
         ent.setAttribute('mixin', 'spr');
         ent.setAttribute('auto-destroy', '');
         this.el.appendChild(ent);
-        if(damage>0)
+        if (damage > 0) {
             this.data.health -= damage;
-            
-        if (this.data.health <= 0) {
-            this.sprite.setAttribute('billboard-texture', { index: 15});
-            GM.data.state = 3;            
-            GM.message.write(`Game Over`,1);        
-        }
-        else {
-            GM.message.write(`Ouch\nHealth = ${this.data.health}/15`);
+
+            if (this.data.health <= 0) {
+                this.sprite.setAttribute('billboard-texture', { index: 15 });
+                GM.data.state = 3;
+                GM.message.write(`Game Over`, 1);
+            }
+            else {
+                GM.message.write(`Ouch\nHealth = ${this.data.health}/25`);
+            }
         }
     }
 });

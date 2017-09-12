@@ -65,10 +65,15 @@ AFRAME.registerComponent('map', {
     addItems: function () {
         let items = document.createElement("a-entity");
         for (let i = 0; i < 150; i++) {
-            let b = document.createElement("a-entity"), tx, ty;
-            let p = this.randomPlace();
-            let item = this.getWeighted(D.items);
-            item.map = p;
+            let b = document.createElement("a-entity"), tx, ty,p,item;
+            
+            do {
+                p = this.randomPlace();
+                item = this.getWeighted(D.items);
+                item.map = p;
+                
+                d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(p.x, p.y));
+            } while (item.m >= d);
 
             if (p.c.data[1] != 0) continue;
             p.c.data[1] = 0x41;

@@ -53,7 +53,7 @@ window.D = {
             d: 6, // damage
             s: 5, //sprite
             i: 23, // palette index
-            m: 0, // minimal distance from start
+            m:6, // minimal distance from start
             c: 10, // change of the item spawning
         }, {
             t: 2, // subtype : sword",
@@ -61,7 +61,7 @@ window.D = {
             d: 10, // damage
             s: 5, //sprite
             i: 24, // palette index
-            m: 0, // minimal distance from start
+            m: 12, // minimal distance from start
             c: 2, // change of the item spawning
         }, {
             t: 3, // subtype : shield",
@@ -77,7 +77,7 @@ window.D = {
             b: 4, // block value
             s: 4, //sprite
             i: 23, // palette index
-            m: 0, // minimal distance from start
+            m: 6, // minimal distance from start
             c: 10, // change of the item spawning
         }, {
             t: 3, // subtype : shield",
@@ -85,7 +85,7 @@ window.D = {
             b: 7, // block value
             s: 4, //sprite
             i: 24, // palette index
-            m: 0, // minimal distance from start
+            m: 12, // minimal distance from start
             c: 5, // change of the item spawning
         }],
     objs: [{ //objectives
