@@ -2,7 +2,6 @@ Must have:
 - better balence
 - sometimes a null exception because of moving while monster animation not finished
 
-
 Should Have:
 - camera follow / rubber banding
 - Health indication

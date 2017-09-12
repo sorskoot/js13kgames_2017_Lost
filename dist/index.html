@@ -142,21 +142,9 @@ void main()
           <a-animation begin="fusing" easing="ease-in" attribute="scale"
                        fill="forwards" from="1 1 1" to="1.5 1.5 1.5" dur="1500"></a-animation>
         </a-entity> <!-- cursor -->
-        
-        <a-text message text="align:center;anchor:align;color:#be2633;width:1;opacity:0.8" 
-                position="0 -0.05 -.5"></a-text>
+        <a-image canvas-text="text:Hello World" position="0 -0.05 -.5"></a-image>        
       </a-entity> <!-- camera -->
-    </a-entity> <!-- player -->
-    <!-- <a-entity id="enemy" position="2 .25 -2" mixin="spr" geometry="primitive: plane; height: .5; width: .5;"  
-            billboard-texture="index:2;lookup:6">
-    </a-entity>
-    <a-entity id="enemy2" position="-2 .25 1" geometry="primitive: plane; height: .5; width: .5;"  
-            billboard-texture="index:2;lookup:7"></a-entity> -->
-            <!-- material-texture="src: #my-texture;index:3" -->
-            <!-- <a-entity geometry="primitive: map; vertices: 1 1 -3, 3 1 -3, 2 2 -3"></a-entity>
-            <a-plane material-texture="color: blue; src: #my-texture" position="0 0 -4" rotation="-90 0 0" width="80" height="80" color="#7BC8A4" scale="" visible="" material="" geometry=""></a-plane> -->
-            <!-- <a-sky src="#sky" material="color:#FFF;shader:flat;npot:true;src:#sky" 
-            position="0 0 0" rotation="0 0 0" scale="-1 1 1" visible="true" geometry="radius:15;primitive:sphere;segmentsWidth:8;segmentsHeight:8"></a-sky>  -->
+    </a-entity> <!-- player -->    
   </a-scene>
 </body>
 </html>

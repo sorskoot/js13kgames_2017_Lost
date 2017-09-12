@@ -8,7 +8,7 @@ AFRAME.registerComponent('gamemanager', {
         this.player = document.getElementById('player');
         this.camera = document.getElementById('camera');
         this.map = document.getElementById('mapgeo').components.map;
-        this.message = document.querySelector('[message]').components.message;
+        this.message = document.querySelector('[canvas-text]').components['canvas-text'];
         this.camera.rot = 0;
         window.GM = this;
     },
@@ -24,7 +24,7 @@ AFRAME.registerComponent('gamemanager', {
                 mobs.forEach(d => d.components.mob.move());
                 setTimeout(() => {
                     this.data.state = 0;
-                }, 250);
+                }, 500);
                 break;
         }
     }

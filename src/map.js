@@ -24,7 +24,8 @@ AFRAME.registerComponent('map', {
                     let y = j - (size / 2);
 
                     plane.addEventListener('click', function () {
-                        GM.player.components.player.move({ x, y });
+                        if (GM.data.state === 0)
+                            GM.player.components.player.move({ x, y });
                     });
 
                     plane.setAttribute('position', `${x} 0 ${y}`);
@@ -65,13 +66,13 @@ AFRAME.registerComponent('map', {
     addItems: function () {
         let items = document.createElement("a-entity");
         for (let i = 0; i < 150; i++) {
-            let b = document.createElement("a-entity"), tx, ty,p,item;
-            
+            let b = document.createElement("a-entity"), tx, ty, p, item;
+
             do {
                 p = this.randomPlace();
                 item = this.getWeighted(D.items);
                 item.map = p;
-                
+
                 d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(p.x, p.y));
             } while (item.m >= d);
 
