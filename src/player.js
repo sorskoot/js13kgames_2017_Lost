@@ -1,3 +1,5 @@
+/*global AFRAME, GM, THREE, size, TWEEN, rnd*/
+
 AFRAME.registerComponent('player', {
     schema: {
         health: { value: 'int', default: 15 }
@@ -17,11 +19,11 @@ AFRAME.registerComponent('player', {
         coords.r = GM.camera.rot;
         if (a.distanceTo(b) > 1.9 || a.distanceTo(b) < .2)
             return;
-        c = GM.map.getPix(data.x + size / 2, data.y + size / 2);
+        var c = GM.map.getPix(data.x + size / 2, data.y + size / 2);
         if (c.data[2] > 0) { // mob in next position
             let mob = document.querySelector(`#e${data.x + size / 2}-${data.y + size / 2}`).components.mob;
             let sprcoord = { x: 0, z: 0 };
-            var tween = new TWEEN.Tween(sprcoord) // Create a new tween that modifies 'coords'.
+            new TWEEN.Tween(sprcoord) // Create a new tween that modifies 'coords'.
                 .to({ x: a.x - b.x, z: a.y - b.y }, 500) // Move to (300, 200) in 1 second.
                 .yoyo(true)
                 .repeat(1)
@@ -51,18 +53,24 @@ AFRAME.registerComponent('player', {
                                 if (p.d > this.attack) this.attack = p.d;
                                 break;
                             case 3: // shield
-
+                                this.defense = Math.max(this.defense, p.b);
                                 break;
                             case 8: // plane piece
                                 this.foundPieces++;
+                                if(this.foundPieces<5){
                                 msg += `\nOnly ${5 - this.foundPieces} pieces left`;
+                                }else{
+                                     GM.data.state = 3;            
+                                     GM.message.write(`You found all pieces\nand escaped the planet!`,1);   
+                                     return;
+                                }
                                 break;
                         }
                         GM.message.write(msg);
                     });
             }
 
-            var tween = new TWEEN.Tween(coords) // Create a new tween that modifies 'coords'.
+            new TWEEN.Tween(coords) // Create a new tween that modifies 'coords'.
                 .to({ x: data.x, z: data.y }, 1000) // Move to (300, 200) in 1 second.
                 .easing(TWEEN.Easing.Quadratic.InOut) // Use an easing function to make the animation smooth.
                 .onUpdate(function () { // Called after tween.js updates 'coords'.
@@ -76,17 +84,22 @@ AFRAME.registerComponent('player', {
         }
     },
     hit: function (amount) {
+        let damage = amount - this.defense;
+        
         let ent = document.createElement('a-entity');
-        ent.setAttribute('billboard-texture', { index: 14, lookup: 5 });
+        
+        ent.setAttribute('billboard-texture', { index: 14, lookup: damage>0?5:1 });
+        
         ent.setAttribute('mixin', 'spr');
         ent.setAttribute('auto-destroy', '');
         this.el.appendChild(ent);
-
-        this.data.health -= amount;
+        if(damage>0)
+            this.data.health -= damage;
+            
         if (this.data.health <= 0) {
             this.sprite.setAttribute('billboard-texture', { index: 15});
             GM.data.state = 3;            
-            GM.message.write(`Game Over`);        
+            GM.message.write(`Game Over`,1);        
         }
         else {
             GM.message.write(`Ouch\nHealth = ${this.data.health}/15`);

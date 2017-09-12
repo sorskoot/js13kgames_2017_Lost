@@ -8,7 +8,7 @@ Should Have:
 - Weapon/shield indication
 - Some AI
 - prevent two mobs in the same place
-- durability on items
+- durability on items 
 - Don't 'move' when clicking on current tile
 
 Could Have:
@@ -18,6 +18,7 @@ Could Have:
 - Biomes
 - A* on mobs
 - begin with the camera pointed higher so you don't start moving
+- keeping items in an inventory, using the best falling to the next best after breaking
 
 Would Like:
 - walls/structures
