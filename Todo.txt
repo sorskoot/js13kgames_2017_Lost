@@ -1,7 +1,8 @@
 Must have:
+- Highlight tiles to which you move
+- camera follow / rubber banding
 
 Should Have:
-- camera follow / rubber banding
 - Health indication
 - Weapon/shield indication
 - Some AI
