@@ -57,3 +57,5 @@ typings/
 # dotenv environment variables file
 .env
 
+cert.pem
+star_c0dr_nl.key

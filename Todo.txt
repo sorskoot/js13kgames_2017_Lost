@@ -1,16 +1,23 @@
 Must have:
 - Highlight tiles to which you move
 - camera follow / rubber banding
+- Improve text in VR
+- Improve playing on desktop
 
 Should Have:
+- Sky
 - Health indication
 - Weapon/shield indication
 - Some AI
 - prevent two mobs in the same place
 - durability on items 
 - Don't 'move' when clicking on current tile
+- Fix shaders in Edge
 
 Could Have:
+- Find alternative GUI for text
+- Add Daydream control support
+- Better desktop support
 - Spawning of mobs during game
 - Spawning of bags during game
 - In game way to restart after winning or dying

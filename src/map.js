@@ -27,7 +27,7 @@ AFRAME.registerComponent('map', {
                         if (GM.data.state === 0)
                             GM.player.components.player.move({ x, y });
                     });
-
+                    plane.setAttribute("cursor-listener");
                     plane.setAttribute('position', `${x} 0 ${y}`);
                     plane.setAttribute('mixin', 'voxel');
                     world.appendChild(plane);
@@ -145,3 +145,15 @@ AFRAME.registerComponent('map', {
         return objs;
     }
 });
+
+AFRAME.registerComponent('cursor-listener', {
+    init: function () {
+      var lastIndex = -1;
+      var COLORS = ['red', 'green', 'blue'];
+      this.el.addEventListener('click', function (evt) {
+        lastIndex = (lastIndex + 1) % COLORS.length;
+        this.setAttribute('material', 'color', COLORS[lastIndex]);
+        console.log('I was clicked at: ', evt.detail.intersection.point);
+      });
+    }
+  });

@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "http-server ./dist -p 1317 -c-1",
+    "start": "http-server ./dist -p 1317 -c-1 -S -C ./cert.pem -K ./star_c0dr_nl.key",
     "clean": "rm -rf dist/; mkdir -p dist",
     "buildProd": "SET NODE_ENV=production&& webpack --config webpack.config --progress --colors",
     "build": "webpack --config webpack.config --progress --colors",
@@ -40,5 +40,8 @@
     "uglify-js-es6": "^2.8.9",
     "uglifyes-webpack-plugin": "^0.4.3",
     "webpack": "^1.15.0"
+  },
+  "dependencies": {
+    "aframe": "^0.7.1"
   }
 }
