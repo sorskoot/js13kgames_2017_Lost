@@ -5,7 +5,8 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "http-server ./dist -p 1317 -c-1 -S -C ./cert.pem -K ./star_c0dr_nl.key",
+    "start-https": "http-server ./dist -p 443 -c-1 -S -C ./cert.pem -K ./star_c0dr_nl.key",
+    "start": "http-server ./dist -p 1317 -c-1",
     "clean": "rm -rf dist/; mkdir -p dist",
     "buildProd": "SET NODE_ENV=production&& webpack --config webpack.config --progress --colors",
     "build": "webpack --config webpack.config --progress --colors",

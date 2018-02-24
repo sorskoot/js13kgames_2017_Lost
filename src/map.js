@@ -22,7 +22,14 @@ AFRAME.registerComponent('map', {
                     }
                     let x = i - (size / 2);
                     let y = j - (size / 2);
-
+                    plane.addEventListener('mouseenter', function (e) {
+                     //   console.log("mouseenter:",e)
+                        e.srcElement.setAttribute('scale', { x: .96, y: .96 });
+                    });
+                    plane.addEventListener('mouseleave', function (e) {
+                       // console.log("mouseleave:",e);
+                        e.srcElement.setAttribute('scale', { x: 1, y: 1 });
+                    });
                     plane.addEventListener('click', function () {
                         if (GM.data.state === 0)
                             GM.player.components.player.move({ x, y });
