@@ -11,7 +11,6 @@ Should Have:
 - Some AI
 - durability on items 
 - Don't 'move' when clicking on current tile
-- Fix shaders in Edge
 
 Could Have:
 - Find alternative GUI for text
@@ -58,3 +57,4 @@ done:
 - better balence
     - shields
 - prevent two mobs in the same place
+- Fix shaders in Edge
