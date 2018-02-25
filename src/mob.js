@@ -12,8 +12,8 @@ AFRAME.registerComponent('mob', {
         // A* would be nice... for now, just move random...
         if (this.data.health <= 0) return;
         let tx, ty, c, s = this,
-            pp = GM.player.components.position.data;
-        var a = new THREE.Vector3(pp.x, pp.z, 0);                      // 0,0
+            playerPosition = GM.player.components.position.data;
+        var a = new THREE.Vector3(playerPosition.x, playerPosition.z, 0);                      // 0,0
         var b = new THREE.Vector3(this.pos.data.x, this.pos.data.z, 0);
         if (a.distanceTo(b) < 1.9) {// player is next to the mob attack
             tx = a.x - b.x;
@@ -38,7 +38,7 @@ AFRAME.registerComponent('mob', {
                 tx = rnd(3) - 1;
                 ty = rnd(3) - 1;
                 c = GM.map.getPix(s.data.x + tx, s.data.y + ty);
-            } while (c.data[0] == 0)
+            } while (c.data[0] == 0 || c.data[2] != 0)
 
             let old = GM.map.getPix(s.data.x, s.data.y);
             old.data[2] = 0;
