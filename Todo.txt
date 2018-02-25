@@ -9,7 +9,6 @@ Should Have:
 - Health indication
 - Weapon/shield indication
 - Some AI
-- prevent two mobs in the same place
 - durability on items 
 - Don't 'move' when clicking on current tile
 - Fix shaders in Edge
@@ -58,3 +57,4 @@ done:
 - sometimes a null exception because of moving while monster animation not finished
 - better balence
     - shields
+- prevent two mobs in the same place
