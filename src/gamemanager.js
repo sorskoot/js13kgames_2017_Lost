@@ -9,8 +9,7 @@ AFRAME.registerComponent('gamemanager', {
         this.camera = document.getElementById('camera');
         this.map = document.getElementById('mapgeo').components.map;
         this.message = document.querySelector('[canvas-text]').components['canvas-text'];
-        this.cursor = document.querySelector('[cursor]');
-        this.camera.rot = 0;
+        this.cursor = document.querySelector('[cursor]');        
         window.GM = this;
     },
     update: function (d) {

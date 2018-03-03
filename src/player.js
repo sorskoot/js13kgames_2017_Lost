@@ -11,16 +11,21 @@ AFRAME.registerComponent('player', {
         this.sprite = document.querySelector('#player-sprite');
     },
     move: function (data) {
+        let rotations = [[45, 0, 315], [90, 0, 270], [135, 180, 225]];
         var s = this;
         if (GM.data.state != 0) return;
         var coords = s.el.components.position.data;
         var a = new THREE.Vector3(data.x, data.y, 0);                      // 0,0
         var b = new THREE.Vector3(coords.x, coords.z, 0);                  // 1,0
+        
+        GM.camera.rot = rotations[Math.abs(~(a.y - b.y))][Math.abs(~(a.x - b.x))];
+
         coords.r = GM.camera.rot;
         if (a.distanceTo(b) > 1.9 || a.distanceTo(b) < .2)
             return;
         var c = GM.map.getPix(data.x + size / 2, data.y + size / 2);
         if (c.data[2] > 0) { // mob in next position
+            // code for attacking the mob.
             let mob = document.querySelector(`#e${data.x + size / 2}-${data.y + size / 2}`).components.mob;
             let sprcoord = { x: 0, z: 0 };
             new TWEEN.Tween(sprcoord) // Create a new tween that modifies 'coords'.
@@ -34,7 +39,7 @@ AFRAME.registerComponent('player', {
                 .onComplete(() => {
                     mob.hit(this.attack + rnd(2));
                     setTimeout(() => {
-                        if(GM.data.state >2)return;
+                        if (GM.data.state > 2) return;
                         GM.data.state = 1;
                         GM.update();
                     }, 1000);
@@ -70,15 +75,20 @@ AFRAME.registerComponent('player', {
                         GM.message.write(msg);
                     });
             }
-
-            new TWEEN.Tween(coords) // Create a new tween that modifies 'coords'.
-                .to({ x: data.x, z: data.y }, 1000) // Move to (300, 200) in 1 second.
-                .easing(TWEEN.Easing.Quadratic.InOut) // Use an easing function to make the animation smooth.
-                .onUpdate(function () { // Called after tween.js updates 'coords'.
+            // move the player
+            new TWEEN.Tween(coords)
+                .to({ x: data.x, z: data.y }, 1000)
+                .easing(TWEEN.Easing.Quadratic.InOut)
+                .onUpdate(function () {
                     s.el.setAttribute('position', `${coords.x} .25 ${coords.z}`);
                 })
                 .onComplete(() => {
-                    if(GM.data.state > 2)return;
+                    // TODO: Tweening
+                    let newCameraPos = { x: Math.sin(degToRad(GM.camera.rot)) * 2, y: Math.cos(degToRad(GM.camera.rot)) * 2 };
+                    GM.camera.setAttribute('rotation', `-27 ${GM.camera.rot} 0`);
+                    GM.camera.setAttribute('position', `${newCameraPos.x} 0.8 ${newCameraPos.y}`);
+
+                    if (GM.data.state > 2) return;
                     GM.data.state = 1;
                     GM.update();
                 })
