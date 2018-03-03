@@ -17,7 +17,7 @@ AFRAME.registerComponent('player', {
         var coords = s.el.components.position.data;
         var a = new THREE.Vector3(data.x, data.y, 0);                      // 0,0
         var b = new THREE.Vector3(coords.x, coords.z, 0);                  // 1,0
-        
+
         GM.camera.rot = rotations[Math.abs(~(a.y - b.y))][Math.abs(~(a.x - b.x))];
 
         coords.r = GM.camera.rot;
@@ -28,12 +28,12 @@ AFRAME.registerComponent('player', {
             // code for attacking the mob.
             let mob = document.querySelector(`#e${data.x + size / 2}-${data.y + size / 2}`).components.mob;
             let sprcoord = { x: 0, z: 0 };
-            new TWEEN.Tween(sprcoord) // Create a new tween that modifies 'coords'.
-                .to({ x: a.x - b.x, z: a.y - b.y }, 500) // Move to (300, 200) in 1 second.
+            new TWEEN.Tween(sprcoord) 
+                .to({ x: a.x - b.x, z: a.y - b.y }, 500)
                 .yoyo(true)
                 .repeat(1)
-                .easing(TWEEN.Easing.Quadratic.InOut) // Use an easing function to make the animation smooth.
-                .onUpdate(() => { // Called after tween.js updates 'coords'.
+                .easing(TWEEN.Easing.Quadratic.InOut) 
+                .onUpdate(() => { 
                     this.sprite.setAttribute('position', `${sprcoord.x} 0 ${sprcoord.z}`);
                 })
                 .onComplete(() => {
