@@ -102,8 +102,9 @@ AFRAME.registerComponent('map', {
         return items;
     },
     addMobs: function () {
+        const numberOfMobs = 1; //150
         let items = document.createElement("a-entity");
-        for (let i = 0; i < 150; i++) {
+        for (let i = 0; i < numberOfMobs; i++) {
             let b = document.createElement("a-entity"), tx, ty;
             let mob = this.getWeighted(D.mobs), p, d;
             do {

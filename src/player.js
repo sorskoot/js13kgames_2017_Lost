@@ -17,10 +17,10 @@ AFRAME.registerComponent('player', {
         var coords = s.el.components.position.data;
         var a = new THREE.Vector3(data.x, data.y, 0);                      // 0,0
         var b = new THREE.Vector3(coords.x, coords.z, 0);                  // 1,0
+        coords.rot = coords.rot || 0;
 
         GM.camera.rot = rotations[Math.abs(~(a.y - b.y))][Math.abs(~(a.x - b.x))];
 
-        coords.r = GM.camera.rot;
         if (a.distanceTo(b) > 1.9 || a.distanceTo(b) < .2)
             return;
         var c = GM.map.getPix(data.x + size / 2, data.y + size / 2);
@@ -28,12 +28,12 @@ AFRAME.registerComponent('player', {
             // code for attacking the mob.
             let mob = document.querySelector(`#e${data.x + size / 2}-${data.y + size / 2}`).components.mob;
             let sprcoord = { x: 0, z: 0 };
-            new TWEEN.Tween(sprcoord) 
+            new TWEEN.Tween(sprcoord)
                 .to({ x: a.x - b.x, z: a.y - b.y }, 500)
                 .yoyo(true)
                 .repeat(1)
-                .easing(TWEEN.Easing.Quadratic.InOut) 
-                .onUpdate(() => { 
+                .easing(TWEEN.Easing.Quadratic.InOut)
+                .onUpdate(() => {
                     this.sprite.setAttribute('position', `${sprcoord.x} 0 ${sprcoord.z}`);
                 })
                 .onComplete(() => {
@@ -75,18 +75,35 @@ AFRAME.registerComponent('player', {
                         GM.message.write(msg);
                     });
             }
+            let currentCameraRotation = GM.camera.getAttribute('rotation');
+            let targetCameraRotation = { x: -27, y: GM.camera.rot };
+            let currentCameraPosition = GM.camera.getAttribute('position');
+            let targetCameraPosition = { x: Math.sin(degToRad(GM.camera.rot)) * 2, z: Math.cos(degToRad(GM.camera.rot)) * 2 };
+
+
             // move the player
-            new TWEEN.Tween(coords)
-                .to({ x: data.x, z: data.y }, 1000)
+            new TWEEN.Tween({
+                x: coords.x, z: coords.z,
+                camposx: currentCameraPosition.x,
+                camposz: currentCameraPosition.z,
+                camrotx: currentCameraRotation.x,
+                camroty: currentCameraRotation.y
+            })
+                .to({
+                    x: data.x, z: data.y,
+                    camposx: targetCameraPosition.x,
+                    camposz: targetCameraPosition.z,
+                    camrotx: targetCameraRotation.x,
+                    camroty: targetCameraRotation.y
+                }, 1000)
                 .easing(TWEEN.Easing.Quadratic.InOut)
                 .onUpdate(function () {
-                    s.el.setAttribute('position', `${coords.x} .25 ${coords.z}`);
+                    s.el.setAttribute('position', `${this.x} .25 ${this.z}`);
+                    GM.camera.setAttribute('position', `${this.camposx} 0.8 ${this.camposz}`);
+                    GM.camera.setAttribute('rotation', `${this.camrotx} ${this.camroty} 0`);
                 })
                 .onComplete(() => {
                     // TODO: Tweening
-                    let newCameraPos = { x: Math.sin(degToRad(GM.camera.rot)) * 2, y: Math.cos(degToRad(GM.camera.rot)) * 2 };
-                    GM.camera.setAttribute('rotation', `-27 ${GM.camera.rot} 0`);
-                    GM.camera.setAttribute('position', `${newCameraPos.x} 0.8 ${newCameraPos.y}`);
 
                     if (GM.data.state > 2) return;
                     GM.data.state = 1;

@@ -7,6 +7,7 @@ AFRAME.registerComponent('gamemanager', {
     init: function () {
         this.player = document.getElementById('player');
         this.camera = document.getElementById('camera');
+        this.camera.deltaRot = 0;
         this.map = document.getElementById('mapgeo').components.map;
         this.message = document.querySelector('[canvas-text]').components['canvas-text'];
         this.cursor = document.querySelector('[cursor]');        
