@@ -17,9 +17,7 @@ AFRAME.registerComponent('player', {
         var coords = s.el.components.position.data;
         var a = new THREE.Vector3(data.x, data.y, 0);                      // 0,0
         var b = new THREE.Vector3(coords.x, coords.z, 0);                  // 1,0
-        coords.rot = coords.rot || 0;
 
-        GM.camera.rot = rotations[Math.abs(~(a.y - b.y))][Math.abs(~(a.x - b.x))];
 
         if (a.distanceTo(b) > 1.9 || a.distanceTo(b) < .2)
             return;
@@ -76,10 +74,19 @@ AFRAME.registerComponent('player', {
                     });
             }
             let currentCameraRotation = GM.camera.getAttribute('rotation');
-            let targetCameraRotation = { x: -27, y: GM.camera.rot };
-            let currentCameraPosition = GM.camera.getAttribute('position');
-            let targetCameraPosition = { x: Math.sin(degToRad(GM.camera.rot)) * 2, z: Math.cos(degToRad(GM.camera.rot)) * 2 };
 
+            let oldCameraRotation = currentCameraRotation.y;
+            let newCameraRotation = rotations[Math.abs(~(a.y - b.y))][Math.abs(~(a.x - b.x))];
+
+            let cw = Math.abs(oldCameraRotation - newCameraRotation);
+            let ccw = Math.abs(oldCameraRotation - (newCameraRotation - 360));
+            if (ccw < cw) {
+                newCameraRotation -= 360;
+            }
+
+            let targetCameraRotation = { x: -27, y: newCameraRotation };
+            let currentCameraPosition = GM.camera.getAttribute('position');
+            let targetCameraPosition = { x: Math.sin(degToRad(newCameraRotation)) * 2, z: Math.cos(degToRad(newCameraRotation)) * 2 };
 
             // move the player
             new TWEEN.Tween({
@@ -103,8 +110,8 @@ AFRAME.registerComponent('player', {
                     GM.camera.setAttribute('rotation', `${this.camrotx} ${this.camroty} 0`);
                 })
                 .onComplete(() => {
-                    // TODO: Tweening
-
+                    GM.camera.rot = (newCameraRotation + 360) % 360; // TODO: Make sure its between 0 and 360 again
+                    GM.camera.setAttribute('rotation', `${targetCameraRotation.x} ${GM.camera.rot} 0`);
                     if (GM.data.state > 2) return;
                     GM.data.state = 1;
                     GM.update();
