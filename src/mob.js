@@ -68,7 +68,7 @@ AFRAME.registerComponent('mob', {
 
         this.data.health -= amount;
         let ent = document.createElement('a-entity');
-        ent.setAttribute('billboard-texture', { index: 14, lookup: 12 });
+        ent.setAttribute('billboard-shader', { index: 14, lookup: 12 });
         ent.setAttribute('mixin', 'spr');
         ent.setAttribute('auto-destroy', '');
         this.el.appendChild(ent);

@@ -129,7 +129,7 @@ AFRAME.registerComponent('player', {
 
         let ent = document.createElement('a-entity');
 
-        ent.setAttribute('billboard-texture', { index: 14, lookup: damage > 0 ? 5 : 1 });
+        ent.setAttribute('billboard-shader', { index: 14, lookup: damage > 0 ? 5 : 1 });
 
         ent.setAttribute('mixin', 'spr');
         ent.setAttribute('auto-destroy', '');
@@ -138,7 +138,7 @@ AFRAME.registerComponent('player', {
             this.data.health -= damage;
 
             if (this.data.health <= 0) {
-                this.sprite.setAttribute('billboard-texture', { index: 15 });
+                this.sprite.setAttribute('billboard-shader', { index: 15 });
                 GM.data.state = 3;
                 GM.message.write(`Game Over`, 1);
             }

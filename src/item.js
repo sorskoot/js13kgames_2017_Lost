@@ -9,7 +9,7 @@ AFRAME.registerComponent('item', {
     },
     get: function () {
         let s = this;
-        s.el.setAttribute("billboard-texture", { index: s.data.props.s, lookup: s.data.props.i });
+        s.el.setAttribute("billboard-shader", { index: s.data.props.s, lookup: s.data.props.i });
         let coords = s.el.components.position.data;
         coords.t = 1;
         let tx = this.data.x, ty = this.data.y;
