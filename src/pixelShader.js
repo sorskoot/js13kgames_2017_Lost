@@ -1,5 +1,5 @@
 /* global THREE, AFRAME */
-AFRAME.registerComponent('mytexture', {
+AFRAME.registerComponent('pixel-shader', {
   schema: {
     color:
     {

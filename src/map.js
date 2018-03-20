@@ -14,11 +14,11 @@ AFRAME.registerComponent('map', {
                 if (worldData.data[wdp] != 0) {
                     let plane = document.createElement("a-entity")
                     plane.classList.add("floor");
-                    if (worldData.data[wdp] == 102) plane.setAttribute("mytexture", "index:11;lookup:8");
-                    else if (worldData.data[wdp] == 170) plane.setAttribute("mytexture", "index:12;lookup:10");
-                    else if (worldData.data[wdp] == 238) plane.setAttribute("mytexture", "index:12;lookup:9");
+                    if (worldData.data[wdp] == 102) plane.setAttribute("pixel-shader", "index:11;lookup:8");
+                    else if (worldData.data[wdp] == 170) plane.setAttribute("pixel-shader", "index:12;lookup:10");
+                    else if (worldData.data[wdp] == 238) plane.setAttribute("pixel-shader", "index:12;lookup:9");
                     else {
-                        plane.setAttribute("mytexture", "index:0;lookup:" + ~~((i * 5) / (j * 2) * 3) % 5);
+                        plane.setAttribute("pixel-shader", "index:0;lookup:" + ~~((i * 5) / (j * 2) * 3) % 5);
                     }
                     let x = i - (size / 2);
                     let y = j - (size / 2);
@@ -91,7 +91,7 @@ AFRAME.registerComponent('map', {
             ty = p.y - size / 2;
             var d = (new THREE.Vector2(0, 0)).distanceTo(new THREE.Vector2(tx, ty));
 
-            b.setAttribute("billboard-texture", { index: 3 });// { index: item.s, lookup: item.i });
+            b.setAttribute("billboard-shader", { index: 3 });// { index: item.s, lookup: item.i });
             b.setAttribute('position', `${tx} .25 ${ty}`);
             b.setAttribute('mixin', 'spr');
             b.setAttribute('item', { x: p.x, y: p.y, props: item });
@@ -116,7 +116,7 @@ AFRAME.registerComponent('map', {
             p.c.data[2] = 0x88;
             this.putPix(p.c, p.x, p.y);
 
-            b.setAttribute("billboard-texture", { index: 2, lookup: mob.i });
+            b.setAttribute("billboard-shader", { index: 2, lookup: mob.i });
             b.setAttribute('position', `${tx} .25 ${ty}`);
             b.setAttribute('mixin', 'spr');
             b.setAttribute('mob', {
@@ -143,7 +143,7 @@ AFRAME.registerComponent('map', {
             p.c.data[1] = 0xEE;
             this.putPix(p.c, p.x, p.y);
 
-            b.setAttribute("billboard-texture", { index: D.objs[i].s });
+            b.setAttribute("billboard-shader", { index: D.objs[i].s });
             b.setAttribute('position', `${tx} .25 ${ty}`);
             b.setAttribute('mixin', 'spr');
             b.setAttribute('item', { x: p.x, y: p.y, props: D.objs[i] });

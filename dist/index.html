@@ -122,7 +122,7 @@ void main()
     <a-assets>
       <a-mixin id="voxel"         
           geometry="primitive: plane; height: 1; width: 1;"
-          mytexture="index:0"
+          pixel-shader="index:0"
           rotation="-90 0 0"
           snap="offset: 0.5 0.5 0.5; snap: 0.5 0.5 0.5"></a-mixin>
       <a-mixin id="spr" geometry="primitive: plane; height: .5; width: .5;"></a-mixin>
@@ -132,7 +132,7 @@ void main()
    
     <a-entity id="player" player position="0 .25 0" >        
       <a-entity id="player-sprite" geometry="primitive: plane; height: .5; width: .5"  
-        billboard-texture="index:1;lookup:-1"></a-entity>
+        billboard-shader="index:1;lookup:-1"></a-entity>
       <a-entity id="camera" camera="active:true;fov:90;zoom:.8;near:0.01;far:15;userHeight:.8" 
             look-controls="standing:true" position="0 0 2.0" 
             rotation="-25 0.8 0" 

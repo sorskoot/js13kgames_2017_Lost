@@ -1,5 +1,5 @@
 /* global THREE, AFRAME */
-AFRAME.registerComponent('billboard-texture', {
+AFRAME.registerComponent('billboard-shader', {
   schema: {
     index:{type:'int'},
     lookup: { type: 'int', default: -1 }

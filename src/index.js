@@ -1,6 +1,6 @@
 require('./global');
 require('./data');
-require('./myShader');
+require('./pixelShader');
 require('./billboardShader');
 require('./map');
 require('./gamemanager');
