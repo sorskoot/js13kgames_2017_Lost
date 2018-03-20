@@ -87,6 +87,8 @@ AFRAME.registerComponent('player', {
             let targetCameraRotation = { x: -27, y: newCameraRotation };
             let currentCameraPosition = GM.camera.getAttribute('position');
             let targetCameraPosition = { x: Math.sin(degToRad(newCameraRotation)) * 2, z: Math.cos(degToRad(newCameraRotation)) * 2 };
+            
+            
 
             // move the player
             new TWEEN.Tween({
@@ -110,6 +112,8 @@ AFRAME.registerComponent('player', {
                     GM.camera.setAttribute('rotation', `${this.camrotx} ${this.camroty} 0`);
                 })
                 .onComplete(() => {
+                    GM.updateTileWithPlayer(data);
+
                     GM.camera.rot = (newCameraRotation + 360) % 360; // TODO: Make sure its between 0 and 360 again
                     GM.camera.setAttribute('rotation', `${targetCameraRotation.x} ${GM.camera.rot} 0`);
                     if (GM.data.state > 2) return;

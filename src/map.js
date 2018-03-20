@@ -13,6 +13,7 @@ AFRAME.registerComponent('map', {
                 let wdp = (i + size * j) * 4;
                 if (worldData.data[wdp] != 0) {
                     let plane = document.createElement("a-entity")
+                    plane.id = `floor-${i}-${j}`;
                     plane.classList.add("floor");
                     if (worldData.data[wdp] == 102) plane.setAttribute("pixel-shader", "index:11;lookup:8");
                     else if (worldData.data[wdp] == 170) plane.setAttribute("pixel-shader", "index:12;lookup:10");
