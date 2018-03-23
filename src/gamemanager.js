@@ -15,16 +15,16 @@ AFRAME.registerComponent('gamemanager', {
         this.updateTileWithPlayer({x:0,y:0});
         window.GM = this;
     },
-    update: function (d) {
+    update: function (coords) {
         if (this.data.state > 1) return;
         switch (this.data.state) {
             case 0:
-                this.player.components.player.move(d);
+                this.player.components.player.move(coords);
                 break;
             case 1:
                 this.cursor.setAttribute('cursor', { fuse: false });
                 let mobs = document.querySelectorAll('[mob]');
-                mobs.forEach(d => d.components.mob.move());
+                mobs.forEach(m => m.components.mob.move());
                 setTimeout(() => {
                     this.cursor.setAttribute('cursor', { fuse: true });
                     this.data.state = 0;
