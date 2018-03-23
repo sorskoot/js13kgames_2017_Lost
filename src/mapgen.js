@@ -111,11 +111,8 @@ var generator = {
                 [0, 0, 2, 0, 0, 0, 0, 1, 1, 0, 0],
             ]
         ];
-
-        // var mapWidth = 256;
-
-        let pl = pieces.length;
-        for (let i = 0; i < pl; i++) {
+        let numberOfPieces = pieces.length;
+        for (let i = 0; i < numberOfPieces; i++) {
             let clone = pieces[i].slice();
             for (let j = 0; j < clone.length; j++)
                 clone[j] = clone[j].slice().reverse();
@@ -139,7 +136,7 @@ var generator = {
             }
         }
 
-        var mapCanvas = document.createElement('canvas');
+        let mapCanvas = document.createElement('canvas');
         mapCanvas.width = mapWidth;
         mapCanvas.height = mapWidth;
 
@@ -218,8 +215,8 @@ var generator = {
                 if (i == loops - 1 && ind == ~~(exits.length / 3)) {
                     special = 2;
                 }
-                let q = addRoom(exit, special);
-                newExits = newExits.concat(q);
+                let room = addRoom(exit, special);
+                newExits = newExits.concat(room);
                 special = 0;
             });
             exits = newExits;
