@@ -11,23 +11,23 @@ AFRAME.registerComponent('player', {
         this.sprite = document.querySelector('#player-sprite');
     },
     move: function (data) {
-        let rotations = [[45, 0, 315], [90, 0, 270], [135, 180, 225]];
-        var s = this;
-        if (GM.data.state != 0) return;
-        var coords = s.el.components.position.data;
-        var a = new THREE.Vector3(data.x, data.y, 0);                      // 0,0
-        var b = new THREE.Vector3(coords.x, coords.z, 0);                  // 1,0
-
-
-        if (a.distanceTo(b) > 1.9 || a.distanceTo(b) < .2)
+        if (GM.data.state != 0){
             return;
-        var c = GM.map.getPix(data.x + size / 2, data.y + size / 2);
-        if (c.data[2] > 0) { // mob in next position
+        }
+
+        let rotations = [[45, 0, 315], [90, 0, 270], [135, 180, 225]],
+            self = this,
+            coords = self.el.components.position.data,
+            newCoords = new THREE.Vector3(data.x, data.y, 0),                      // 0,0
+            oldCoords = new THREE.Vector3(coords.x, coords.z, 0),                  // 1,0
+            color = GM.map.getPix(newCoords.x + size / 2, newCoords.y + size / 2);
+
+        if (color.data[2] > 0) { // mob in next position
             // code for attacking the mob.
-            let mob = document.querySelector(`#e${data.x + size / 2}-${data.y + size / 2}`).components.mob;
+            let mob = document.querySelector(`#e${newCoords.x + size / 2}-${newCoords.y + size / 2}`).components.mob;
             let sprcoord = { x: 0, z: 0 };
             new TWEEN.Tween(sprcoord)
-                .to({ x: a.x - b.x, z: a.y - b.y }, 500)
+                .to({ x: newCoords.x - oldCoords.x, z: newCoords.y - oldCoords.y }, 500)
                 .yoyo(true)
                 .repeat(1)
                 .easing(TWEEN.Easing.Quadratic.InOut)
@@ -42,22 +42,22 @@ AFRAME.registerComponent('player', {
                         GM.update();
                     }, 1000);
                 })
-                .start(); // Start the tween immediately.            
+                .start();
         } else {
-            if (c.data[1] > 0) { // item in next position
-                document.querySelector(`#b${data.x + size / 2}-${data.y + size / 2}`).components.item.get()
-                    .then(p => {
-                        let msg = `Found ${p.n}`;
-                        switch (p.t) {
+            if (color.data[1] > 0) { // item in next position
+                document.querySelector(`#b${newCoords.x + size / 2}-${newCoords.y + size / 2}`).components.item.get()
+                    .then(item => {
+                        let msg = `Found ${item.n}`;
+                        switch (item.t) {
                             case 1: // heart
-                                s.data.health = Math.min(s.data.health += 5, 25);
-                                msg += `\nHealth = ${s.data.health}/25`;
+                                self.data.health = Math.min(self.data.health += 5, 25);
+                                msg += `\nHealth = ${self.data.health}/25`;
                                 break;
                             case 2: // sword
-                                if (p.d > this.attack) this.attack = p.d;
+                                if (item.d > this.attack) this.attack = item.d;
                                 break;
                             case 3: // shield
-                                this.defense = Math.max(this.defense, p.b);
+                                this.defense = Math.max(this.defense, item.b);
                                 break;
                             case 8: // plane piece
                                 this.foundPieces++;
@@ -73,22 +73,21 @@ AFRAME.registerComponent('player', {
                         GM.message.write(msg);
                     });
             }
-            let currentCameraRotation = GM.camera.getAttribute('rotation');
 
-            let oldCameraRotation = currentCameraRotation.y;
-            let newCameraRotation = rotations[Math.abs(~(a.y - b.y))][Math.abs(~(a.x - b.x))];
+            let currentCameraRotation = GM.camera.getAttribute('rotation'),
+                oldCameraRotation = currentCameraRotation.y,
+                newCameraRotation = rotations[Math.abs(~(newCoords.y - oldCoords.y))][Math.abs(~(newCoords.x - oldCoords.x))],
+               
+                cw = Math.abs(oldCameraRotation - newCameraRotation),
+                ccw = Math.abs(oldCameraRotation - (newCameraRotation - 360));
 
-            let cw = Math.abs(oldCameraRotation - newCameraRotation);
-            let ccw = Math.abs(oldCameraRotation - (newCameraRotation - 360));
             if (ccw < cw) {
                 newCameraRotation -= 360;
             }
 
-            let targetCameraRotation = { x: -27, y: newCameraRotation };
-            let currentCameraPosition = GM.camera.getAttribute('position');
-            let targetCameraPosition = { x: Math.sin(degToRad(newCameraRotation)) * 2, z: Math.cos(degToRad(newCameraRotation)) * 2 };
-            
-            
+            let targetCameraRotation = { x: -27, y: newCameraRotation },
+                currentCameraPosition = GM.camera.getAttribute('position'),
+                targetCameraPosition = { x: Math.sin(degToRad(newCameraRotation)) * 2, z: Math.cos(degToRad(newCameraRotation)) * 2 };
 
             // move the player
             new TWEEN.Tween({
@@ -99,7 +98,7 @@ AFRAME.registerComponent('player', {
                 camroty: currentCameraRotation.y
             })
                 .to({
-                    x: data.x, z: data.y,
+                    x: newCoords.x, z: newCoords.y,
                     camposx: targetCameraPosition.x,
                     camposz: targetCameraPosition.z,
                     camrotx: targetCameraRotation.x,
@@ -107,27 +106,26 @@ AFRAME.registerComponent('player', {
                 }, 1000)
                 .easing(TWEEN.Easing.Quadratic.InOut)
                 .onUpdate(function () {
-                    s.el.setAttribute('position', `${this.x} .25 ${this.z}`);
+                    self.el.setAttribute('position', `${this.x} .25 ${this.z}`);
                     GM.camera.setAttribute('position', `${this.camposx} 0.8 ${this.camposz}`);
                     GM.camera.setAttribute('rotation', `${this.camrotx} ${this.camroty} 0`);
                 })
                 .onComplete(() => {
-                    GM.updateTileWithPlayer(data);
-
-                    GM.camera.rot = (newCameraRotation + 360) % 360; // TODO: Make sure its between 0 and 360 again
+                    GM.updateTileWithPlayer(newCoords);
+                    GM.camera.rot = (newCameraRotation + 360) % 360;
                     GM.camera.setAttribute('rotation', `${targetCameraRotation.x} ${GM.camera.rot} 0`);
-                    if (GM.data.state > 2) return;
+                    if (GM.data.state > 2){
+                        return;
+                    }
                     GM.data.state = 1;
                     GM.update();
                 })
-                .start(); // Start the tween immediately.
+                .start();
         }
     },
     hit: function (amount) {
-
-        let damage = amount * (rnd(100) < this.defense ? 0 : 1);
-
-        let ent = document.createElement('a-entity');
+        let damage = amount * (rnd(100) < this.defense ? 0 : 1),
+            ent = document.createElement('a-entity');
 
         ent.setAttribute('billboard-shader', { index: 14, lookup: damage > 0 ? 5 : 1 });
 
@@ -136,7 +134,6 @@ AFRAME.registerComponent('player', {
         this.el.appendChild(ent);
         if (damage > 0) {
             this.data.health -= damage;
-
             if (this.data.health <= 0) {
                 this.sprite.setAttribute('billboard-shader', { index: 15 });
                 GM.data.state = 3;
