@@ -71,9 +71,9 @@ AFRAME.registerComponent('map', {
         } while (!f)
         return item;
     },
-    addItems: function () {
+    addItems: function (numberOfItems = 150) {
         let items = document.createElement("a-entity");
-        for (let i = 0; i < 150; i++) {
+        for (let i = 0; i < numberOfItems; i++) {
             let b = document.createElement("a-entity"), tx, ty, p, item;
 
             do {

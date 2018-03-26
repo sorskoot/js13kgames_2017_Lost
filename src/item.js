@@ -31,6 +31,7 @@ AFRAME.registerComponent('item', {
                 })
                 .onComplete(function () {
                     s.el.parentNode.removeChild(s.el);
+                    GM.map.addItems(1);
                     r(s.data.props);
                 })
             t1.chain(t2).start(); // Start the tween immediately.
