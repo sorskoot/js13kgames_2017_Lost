@@ -102,8 +102,7 @@ AFRAME.registerComponent('map', {
         }
         return items;
     },
-    addMobs: function () {
-        const numberOfMobs = 150;
+    addMobs: function (numberOfMobs = 150) {
         let items = document.createElement("a-entity");
         for (let i = 0; i < numberOfMobs; i++) {
             let b = document.createElement("a-entity"), tx, ty;

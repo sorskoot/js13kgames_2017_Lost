@@ -83,6 +83,7 @@ AFRAME.registerComponent('mob', {
             GM.map.putPix(pix, this.data.x, this.data.y);
             setTimeout(() => {
                 this.el.setAttribute('auto-destroy', '');
+                GM.map.addMobs(1);
             }, 500);
         }
     }
